@@ -9,10 +9,10 @@ import { User } from 'src/database/entities/user.entity';
 import { RegisterUserDto } from './dtos/register.user';
 import { Permission } from '../permission';
 
-@ApiTags('auth')
+@ApiTags('auth-user')
 @ApiBearerAuth()
-@Controller('auth')
-export class AuthController {
+@Controller('auth-user')
+export class AuthUserController {
   constructor(private authService: AuthService) {}
 
   @Post('user/login')

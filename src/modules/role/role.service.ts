@@ -30,16 +30,16 @@ export class RoleService {
     return await RoleRepository.getAll(filter);
   }
 
-  public async getAllRole() {
-    return await RoleRepository.find({
-      where: {
-        deletedAt: null,
-      },
-      order: {
-        createdOnDate: 'DESC',
-      },
-    });
-  }
+  // public async getAllRole() {
+  //   return await RoleRepository.find({
+  //     where: {
+  //       deletedAt: null,
+  //     },
+  //     order: {
+  //       createdOnDate: 'DESC',
+  //     },
+  //   });
+  // }
 
   public async getById(id: string) {
     const result = await RoleRepository.findOne({

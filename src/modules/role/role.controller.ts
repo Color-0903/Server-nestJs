@@ -27,11 +27,11 @@ export class RoleController {
     return await this.roleService.getAll(filter);
   }
 
-  @Get('get-all-role-no-pagination')
-  @Allow(Permission.Authenticated)
-  public async getAllRole() {
-    return await this.roleService.getAllRole();
-  }
+  // @Get('get-all-role-no-pagination')
+  // @Allow(Permission.Authenticated)
+  // public async getAllRole() {
+  //   return await this.roleService.getAllRole();
+  // }
 
   @Get(':id')
   @Allow(Permission.Administrator.Read)

@@ -21,8 +21,8 @@ export const Permission = {
     internal: true,
   }),
   Customer: new CrudPermissionDefinition('Customer'),
-  // Role: new CrudPermissionDefinition('Role'),
-  // Administrator: new CrudPermissionDefinition('Administrator'),
+  Role: new CrudPermissionDefinition('Role'),
+  Administrator: new CrudPermissionDefinition('Administrator'),
 };
 
 export function getAllPermissionsMetadata(): PermissionMetadata[] {

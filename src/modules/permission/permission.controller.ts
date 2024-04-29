@@ -7,8 +7,8 @@ import { PermissionService } from './permission.service';
 export class PermissionController {
   constructor(private permissionService: PermissionService) {}
 
-  @Get('')
-  public async get() {
-    return this.permissionService.getAll();
-  }
+  // @Get('')
+  // public async get() {
+  //   return this.permissionService.getAll();
+  // }
 }

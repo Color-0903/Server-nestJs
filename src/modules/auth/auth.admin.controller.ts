@@ -7,10 +7,10 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { UserReq } from 'src/common/decorators/user.decorator';
 import { User } from 'src/database/entities/user.entity';
 
-@ApiTags('auth')
+@ApiTags('auth-admin')
 @ApiBearerAuth()
-@Controller('auth')
-export class AuthController {
+@Controller('auth-admin')
+export class AuthAdminController {
   constructor(private authService: AuthService) {}
 
   @Post('admin/login')
