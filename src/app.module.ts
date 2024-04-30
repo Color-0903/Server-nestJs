@@ -9,9 +9,11 @@ import { RoleModule } from './modules/role/role.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CommonModule } from './common/common.module';
+import { InitializerModule } from './modules/initializer/initializer.module';
 
 @Module({
   imports: [
+    InitializerModule,
     CommonModule,
     TypeOrmModule.forRoot(dataSource),
     AuthModule,

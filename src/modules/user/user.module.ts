@@ -2,7 +2,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 
 import { Module, forwardRef } from '@nestjs/common';
-import { PasswordCipher } from '../../common/util/password-cipher';
+import { PasswordCipher } from '../../common/utils/password-cipher';
 import { RoleModule } from '../role/role.module';
 
 @Module({

@@ -1,9 +1,9 @@
 export enum USER_TYPE{
   USER = "User",
-  SUPERADMIN = "SuperAdmin"
+  ADMIN = "Admin"
 }
 
-export enum ASSET_TYPE {
+export enum AssetType {
   IMAGE = 'IMAGE',
   VIDEO = 'VIDEO',
   BINARY = 'BINARY',

@@ -4,10 +4,10 @@ import { Body, Controller, Get, Post, UnauthorizedException, UseGuards } from '@
 import { LoginDto, LoginResponseDto } from './dtos/login.dto';
 import { USER_TYPE } from 'src/common/constants/enum';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { UserReq } from 'src/common/decorators/user.decorator';
 import { User } from 'src/database/entities/user.entity';
 import { RegisterUserDto } from './dtos/register.user';
 import { Permission } from '../permission';
+import { UserReq } from 'src/common/decorators/userReq.decorator';
 
 @ApiTags('auth-user')
 @ApiBearerAuth()

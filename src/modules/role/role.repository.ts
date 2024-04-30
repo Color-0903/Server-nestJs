@@ -34,13 +34,13 @@ export const RoleRepository = dataSource.getRepository(Role).extend({
     });
     return result;
   },
-  async getRoleByCode(code: string) {
+  async getRoleByName(name: string) {
     return RoleRepository.findOne({
-      where: { code },
+      where: { name },
     });
   },
   async getSuperAdminRole() {
-    return RoleRepository.getRoleByCode(Permission.SuperAdmin.name);
+    return RoleRepository.getRoleByName(Permission.SuperAdmin.name);
   },
 
   async getByRoleIds(roleIds: string[]) {

@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { PasswordCipher } from '../../common/util/password-cipher';
-import { RoleService } from '../role/role.service';
+import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
+import { PasswordCipher } from '../../common/utils/password-cipher';
+import { Permission } from '../permission';
+import { RoleRepository } from '../role/role.repository';
+import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dtos/create.dto';
-import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
@@ -13,12 +15,46 @@ export class UserService {
     private roleService: RoleService,
   ) {}
 
+  public async initUser() {
+    const user = await UserRepository.findOneBy({
+      identifier: process.env.INITIAL_ADMIN_IDENTIFIER,
+      type: USER_TYPE.ADMIN,
+    });
+    if (!user) {
+      let AdminRole = await RoleRepository.findOneBy({
+        name: Permission.SuperAdmin.name,
+      });
+      if (!AdminRole) {
+        AdminRole = await RoleRepository.save({
+          name: Permission.SuperAdmin.name,
+        });
+      }
+      const passwordHash = await this.passwordCipher.hash(
+        process.env.INITIAL_ADMIN_PASSWORD,
+      );
+
+      console.log(AdminRole)
+      await UserRepository.save({
+        identifier: process.env.INITIAL_ADMIN_IDENTIFIER,
+        passwordHash: passwordHash,
+        type: USER_TYPE.ADMIN,
+        isActive: true,
+        verified: true,
+        roles: [AdminRole],
+      });
+    }
+  }
+
   public async create(payload: CreateUserDto, roleCode: string) {
     try {
       const passwordHash = await this.passwordCipher.hash(payload.password);
-      const role = await this.roleService.getRoleByCode(roleCode);
+      const role = await this.roleService.getRoleByName(roleCode);
 
-      await UserRepository.save({ ...payload, passwordHash: passwordHash, roles: [role] });
+      await UserRepository.save({
+        ...payload,
+        passwordHash: passwordHash,
+        roles: [role],
+      });
 
       return {
         result: RESPONSE_MESSAGER.SUCCESS,

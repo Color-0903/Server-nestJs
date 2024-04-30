@@ -1,6 +1,11 @@
-import { Column, DeepPartial, Entity, Tree, TreeChildren, TreeParent } from 'typeorm';
+import { AssetType } from 'src/common/constants/enum';
+import {
+  Column,
+  DeepPartial,
+  Entity,
+  Tree
+} from 'typeorm';
 import { AbstractEntity } from '../../common/abstract/abstract.entity';
-import { ASSET_TYPE } from '../../common/constants/enum';
 
 @Entity()
 @Tree('materialized-path')
@@ -11,7 +16,7 @@ export class Asset extends AbstractEntity {
 
   @Column() name: string;
 
-  @Column('varchar') type: ASSET_TYPE;
+  @Column('varchar') type: AssetType;
 
   @Column({ nullable: true }) mimeType: string;
 
@@ -23,17 +28,17 @@ export class Asset extends AbstractEntity {
 
   @Column({ nullable: true }) source: string;
 
-  @Column({ nullable: true }) preview: string;
+  // @Column({ nullable: true }) preview: string;
 
-  @Column('simple-json', { nullable: true })
-  focalPoint?: { x: number; y: number };
+  // @Column('simple-json', { nullable: true })
+  // focalPoint?: { x: number; y: number };
 
-  @Column({ nullable: true })
-  parentId: number;
+  // @Column({ nullable: true })
+  // parentId: number;
 
-  @TreeChildren()
-  children: Asset[];
+  // @TreeChildren()
+  // children: Asset[];
 
-  @TreeParent()
-  parent: Asset;
+  // @TreeParent()
+  // parent: Asset;
 }

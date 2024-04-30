@@ -4,8 +4,8 @@ import { Body, Controller, Get, Post, UnauthorizedException, UseGuards } from '@
 import { LoginDto, LoginResponseDto } from './dtos/login.dto';
 import { USER_TYPE } from 'src/common/constants/enum';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { UserReq } from 'src/common/decorators/user.decorator';
 import { User } from 'src/database/entities/user.entity';
+import { UserReq } from 'src/common/decorators/userReq.decorator';
 
 @ApiTags('auth-admin')
 @ApiBearerAuth()
@@ -18,7 +18,7 @@ export class AuthAdminController {
   public async adminLogin(
     @Body() payload: LoginDto,
   ): Promise<LoginResponseDto> {
-    payload.type = USER_TYPE.SUPERADMIN;
+    payload.type = USER_TYPE.ADMIN;
     return await this.authService.authenticate(payload);
   }
 

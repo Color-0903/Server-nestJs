@@ -3,7 +3,7 @@ import { User } from 'src/database/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from '../user/user.repository';
 import { LoginDto } from './dtos/login.dto';
-import { PasswordCipher } from 'src/common/util/password-cipher';
+import { PasswordCipher } from 'src/common/utils/password-cipher';
 import { RegisterUserDto } from './dtos/register.user';
 import { UserService } from '../user/user.service';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';

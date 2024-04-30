@@ -1,5 +1,5 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import { Entity, Column, BeforeInsert, ManyToMany, JoinTable, DeepPartial } from 'typeorm';
+import { Column, DeepPartial, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('roles')
@@ -12,9 +12,6 @@ export class Role extends AbstractEntity {
 
   @Column({ default: false })
   isHidden: boolean;
-
-  @Column({ nullable: true, unique: true })
-  code?: string;
 
   @ManyToMany(() => User, (user) => user.roles, {
     onDelete: 'CASCADE',

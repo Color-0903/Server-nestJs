@@ -3,7 +3,7 @@ import { AuthUserController } from "./auth.user.controller";
 import { AuthService } from "./auth.service";
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from "src/common/guards/jwt.strategy";
-import { PasswordCipher } from "src/common/util/password-cipher";
+import { PasswordCipher } from "src/common/utils/password-cipher";
 import { UserModule } from "../user/user.module";
 import { AuthAdminController } from "./auth.admin.controller";
 

@@ -1,33 +1,31 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Entity,
-  Column,
-  ManyToMany,
-  OneToMany,
-  DeepPartial,
-  Unique,
-  Index,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
-import { Role } from './role.entity';
-import { Asset } from './asset.entity';
 import { USER_TYPE } from 'src/common/constants/enum';
+import {
+  Column,
+  DeepPartial,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  Unique
+} from 'typeorm';
+import { Asset } from './asset.entity';
+import { Role } from './role.entity';
 
 @Entity('users')
-@Unique(['identifier', 'type', 'deletedAt'])
 export class User extends AbstractEntity {
   constructor(input?: DeepPartial<User>) {
     super(input);
   }
-  @Column()
-  @Index('Users_idx_identifier')
-  identifier: string;
 
+  @Column({ nullable: false })
+  identifier: string;
+  
   @Column({ default: false })
   type: USER_TYPE;
 
-  @Column({ select: false }) 
+  @Column({ select: false })
   passwordHash: string;
 
   @Column({ default: true })

@@ -2,10 +2,10 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { User } from 'src/database/entities/user.entity';
-import { ApiOkResponsePaginated } from 'src/common/util/query-util';
+import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
 import { Permission } from '../permission';
-import { Allow } from 'src/common/decorators/allow.decorator';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
+import { Allow } from '../auth/guards/allow.decorator';
 
 @ApiTags('users')
 @Controller('users')

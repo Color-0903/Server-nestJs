@@ -1,17 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserReq } from 'src/common/decorators/user.decorator';
 import { RoleService } from './role.service';
 import { Permission } from '../permission';
 import { User } from '../../database/entities/user.entity';
-import { ApiOkResponsePaginated } from 'src/common/util/query-util';
+import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
 import { Role } from 'src/database/entities/role.entity';
 import { UpdateRoleDto } from './dtos/update-role.dto';
 import { DELETE_TYPE } from 'src/common/constants/enum';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { Allow } from 'src/common/decorators/allow.decorator';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 import { CreateRoleDto } from './dtos/create-role.dto';
+import { Allow } from '../auth/guards/allow.decorator';
+import { UserReq } from 'src/common/decorators/userReq.decorator';
 
 @ApiTags('roles')
 @ApiBearerAuth()
