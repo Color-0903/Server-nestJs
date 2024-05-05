@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { dataSource } from './database/data-source';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthorizationGuard } from './common/guards/authorization.guard';
-import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './modules/user/user.module';
-import { RoleModule } from './modules/role/role.module';
-import { PermissionModule } from './modules/permission/permission.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
+import { dataSource } from './database/data-source';
+import { AuthModule } from './modules/auth/auth.module';
+import { CategoryModule } from './modules/category/category.module';
+import { ColorModule } from './modules/color/color.module';
 import { InitializerModule } from './modules/initializer/initializer.module';
+import { PermissionModule } from './modules/permission/permission.module';
+import { RoleModule } from './modules/role/role.module';
+import { SizeModule } from './modules/size/size.module';
+import { UserModule } from './modules/user/user.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -18,6 +20,10 @@ import { InitializerModule } from './modules/initializer/initializer.module';
     TypeOrmModule.forRoot(dataSource),
     AuthModule,
     UserModule,
+    ColorModule,
+    CategoryModule,
+    SizeModule,
+    ProductModule,
     RoleModule,
     PermissionModule,
   ],

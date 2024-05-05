@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, DeepPartial, DeleteDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeepPartial,
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export abstract class AbstractEntity {
   protected constructor(input?: DeepPartial<AbstractEntity>) {
@@ -26,4 +33,17 @@ export abstract class AbstractEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
+}
+
+export abstract class IdColumn {
+  protected constructor(input?: DeepPartial<AbstractEntity>) {
+    if (input) {
+      for (const [key, value] of Object.entries(input)) {
+        (this as any)[key] = value;
+      }
+    }
+  }
+
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 }

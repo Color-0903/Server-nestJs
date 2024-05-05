@@ -4,14 +4,14 @@ import {
   Column,
   DeepPartial,
   Entity,
-  Index,
   JoinColumn,
   ManyToMany,
   ManyToOne,
-  Unique
+  OneToOne
 } from 'typeorm';
 import { Asset } from './asset.entity';
 import { Role } from './role.entity';
+import { Order } from './order.entity';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -34,8 +34,8 @@ export class User extends AbstractEntity {
   @Column({ default: false })
   verified: boolean;
 
-  @Column({ type: Date, nullable: true })
-  lastLogin: Date | null;
+  // @Column({ type: Date, nullable: true })
+  // lastLogin: Date | null;
 
   @Column({ nullable: true })
   assetId: boolean;
@@ -48,4 +48,9 @@ export class User extends AbstractEntity {
   @ManyToOne(() => Asset, { nullable: true })
   @JoinColumn({ name: 'assetId' })
   Asset?: Asset;
+
+  @OneToOne(() => Order, (p) => p.user, {
+    onDelete: 'CASCADE',
+  })
+  order: Order;
 }

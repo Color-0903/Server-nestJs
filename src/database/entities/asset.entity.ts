@@ -3,9 +3,11 @@ import {
   Column,
   DeepPartial,
   Entity,
+  ManyToMany,
   Tree
 } from 'typeorm';
 import { AbstractEntity } from '../../common/abstract/abstract.entity';
+import { Product } from './products.entity';
 
 @Entity()
 @Tree('materialized-path')
@@ -28,17 +30,6 @@ export class Asset extends AbstractEntity {
 
   @Column({ nullable: true }) source: string;
 
-  // @Column({ nullable: true }) preview: string;
-
-  // @Column('simple-json', { nullable: true })
-  // focalPoint?: { x: number; y: number };
-
-  // @Column({ nullable: true })
-  // parentId: number;
-
-  // @TreeChildren()
-  // children: Asset[];
-
-  // @TreeParent()
-  // parent: Asset;
+  @ManyToMany(() => Product, (p) => p.assets)
+  products: Product[];
 }
