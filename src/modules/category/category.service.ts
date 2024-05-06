@@ -13,13 +13,16 @@ import { FilterCategoryDto } from './dtos/filter.dto';
 export class CategoryService {
   constructor() {}
 
-  public async getAll(filter: FilterCategoryDto) {}
+  public async getAll(filter: FilterCategoryDto) {
+    return await CategoryRepository.getAll(filter);
+  }
 
   public async create(dto: CreateCategoryDto) {
     try {
       const findCategory = await CategoryRepository.findOneBy({ name: dto.name });
       if (!!findCategory) throw new ConflictException();
 
+      console.log(dto)
       return await CategoryRepository.save(dto);
     } catch (error) {
       throw new BadRequestException(error);

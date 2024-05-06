@@ -1,11 +1,11 @@
-import { User } from 'src/database/entities/user.entity';
-import { Brackets, WhereExpressionBuilder } from 'typeorm';
-import { DELETE_TYPE } from '../../common/constants/enum';
-import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 import dataSource from 'src/database/data-source';
+import { User } from 'src/database/entities/user.entity';
+import { Brackets } from 'typeorm';
+import { DELETE_TYPE } from '../../common/constants/enum';
+import { FilterUserDto } from './dtos/user.dto';
 
 export const UserRepository = dataSource.getRepository(User).extend({
-  async getAll(filter: SearchFilter) {
+  async getAll(filter: FilterUserDto) {
     const query = UserRepository.createQueryBuilder('user');
 
     if (filter.fullTextSearch) {
@@ -22,8 +22,8 @@ export const UserRepository = dataSource.getRepository(User).extend({
               })
               .orWhere(`user.email like :email${index}`, {
                 [`email${index}`]: `%${text.trim()}%`,
-              })
-          )
+              }),
+          ),
         );
       });
     }
@@ -46,5 +46,4 @@ export const UserRepository = dataSource.getRepository(User).extend({
       ? await UserRepository.delete(id)
       : await UserRepository.update(id, { deletedAt: new Date() });
   },
- 
 });

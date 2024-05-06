@@ -13,7 +13,9 @@ import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
 export class ColorService {
   constructor() {}
 
-  public async getAll(filter: FilterColorDto) {}
+  public async getAll(filter: FilterColorDto) {
+    return await ColorRepository.getAll(filter);
+  }
 
   public async create(dto: CreateColorDto) {
     try {

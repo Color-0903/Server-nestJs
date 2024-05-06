@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserService } from './user.service';
-import { User } from 'src/database/entities/user.entity';
 import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
-import { Permission } from '../permission';
-import { SearchFilter } from 'src/common/dtos/search-filter.dto';
+import { User } from 'src/database/entities/user.entity';
 import { Allow } from '../auth/guards/allow.decorator';
+import { Permission } from '../permission';
+import { FilterUserDto } from './dtos/user.dto';
+import { UserService } from './user.service';
 
 @ApiTags('users')
 @Controller('users')
@@ -16,7 +16,7 @@ export class UserController {
   @Get('get-all')
   @ApiOkResponsePaginated(User)
   @Allow(Permission.Authenticated)
-  async getAllDoctor(@Query() filter: SearchFilter) {
+  async getAllDoctor(@Query() filter: FilterUserDto) {
     return await this.userService.getAll(filter);
   }
 }

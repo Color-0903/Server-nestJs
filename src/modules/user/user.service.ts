@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
-import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 import { PasswordCipher } from '../../common/utils/password-cipher';
 import { Permission } from '../permission';
 import { RoleRepository } from '../role/role.repository';
 import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dtos/create.dto';
+import { FilterUserDto } from './dtos/user.dto';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -64,7 +64,7 @@ export class UserService {
     }
   }
 
-  public async getAll(filter: SearchFilter) {
+  public async getAll(filter: FilterUserDto) {
     return await UserRepository.getAll(filter);
   }
 

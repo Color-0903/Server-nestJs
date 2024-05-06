@@ -30,7 +30,7 @@ export class ColorController {
   @ApiOkResponsePaginated(Color)
   // @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterColorDto) {
-    return true;
+    return this.colorService.getAll(filter);
   }
 
   @Post('')

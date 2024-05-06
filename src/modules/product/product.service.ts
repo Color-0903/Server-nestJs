@@ -1,20 +1,20 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common';
+import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
 import { FilterProductDto } from './dtos/filter.dto';
 import { CreateProductDto, UpdateProductDto } from './dtos/product.dto';
 import { ProductRepository } from './product.repository';
-import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
-import { SizeRepository } from '../size/size.repository';
 
 @Injectable()
 export class ProductService {
   constructor() {}
 
-  public async getAll(filter: FilterProductDto) {}
+  public async getAll(filter: FilterProductDto) {
+    return await ProductRepository.getAll(filter);
+  }
 
   public async create(dto: CreateProductDto) {
     try {

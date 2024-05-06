@@ -12,6 +12,7 @@ import { RoleModule } from './modules/role/role.module';
 import { SizeModule } from './modules/size/size.module';
 import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
+import { AssetModule } from './modules/asset/asset.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ProductModule } from './modules/product/product.module';
     SizeModule,
     ProductModule,
     RoleModule,
+    AssetModule,
     PermissionModule,
   ],
   controllers: [],

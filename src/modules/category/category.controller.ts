@@ -18,6 +18,7 @@ import { Permission } from '../permission';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dtos/category.dto';
 import { FilterCategoryDto } from './dtos/filter.dto';
+import { CategoryRepository } from './category.repository';
 
 @ApiTags('category')
 @Controller('category')
@@ -29,7 +30,13 @@ export class CategoryController {
   @ApiOkResponsePaginated(Category)
   // @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterCategoryDto) {
-    return true;
+    return this.categoryService.getAll(filter);
+  }
+
+  @Get(':id')
+  // @Allow(Permission.Authenticated)
+  async getById(@Param('id') id: string) {
+    return CategoryRepository.findOneBy({ id });
   }
 
   @Post('')
@@ -46,7 +53,7 @@ export class CategoryController {
 
   @Delete(':id')
   @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string, @UserReq() userReq: User) {
+  async delete(@Param('id') id: string/* , @UserReq() userReq: User */) {
     return this.categoryService.delete(id);
   }
 }

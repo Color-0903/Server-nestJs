@@ -1,4 +1,4 @@
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Body, Controller, Get, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { LoginDto, LoginResponseDto } from './dtos/login.dto';

@@ -13,7 +13,9 @@ import { CreateSizeDto, UpdateSizeDto } from './dtos/size';
 export class SizeService {
   constructor() {}
 
-  public async getAll(filter: FilterSizeDto) {}
+  public async getAll(filter: FilterSizeDto) {
+    return await SizeRepository.getAll(filter);
+  }
 
   public async create(dto: CreateSizeDto) {
     try {

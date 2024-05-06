@@ -29,7 +29,7 @@ export class SizeController {
   @ApiOkResponsePaginated(Size)
   // @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterSizeDto) {
-    return true;
+    return this.categoryService.getAll(filter);
   }
 
   @Post('')

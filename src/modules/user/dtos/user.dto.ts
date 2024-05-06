@@ -1,4 +1,5 @@
+import { PartialType } from '@nestjs/swagger';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 
-export class AdminSearchFilter extends SearchFilter {}
-export class UserSearchFilter extends SearchFilter {}
+export class FilterAdminDto extends SearchFilter {}
+export class FilterUserDto extends SearchFilter {}

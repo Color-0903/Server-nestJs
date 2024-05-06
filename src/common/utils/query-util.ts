@@ -67,9 +67,7 @@ SelectQueryBuilder.prototype.toPaginationResponse = async function <Entity>(
       default:
         break;
     }
-  } else {
-    this.orderBy(`${alias}.createdOnDate`, 'DESC');
-  }
+  } 
 
   const total = await this.getCount();
   const take = params.size;

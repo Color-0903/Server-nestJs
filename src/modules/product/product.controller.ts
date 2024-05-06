@@ -30,7 +30,7 @@ export class ProductController {
   @ApiOkResponsePaginated(Product)
   // @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterProductDto) {
-    return true;
+    return this.productService.getAll(filter);
   }
 
   @Post('')
