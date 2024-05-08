@@ -12,8 +12,8 @@ export const ColorRepository = dataSource.getRepository(Color).extend({
       listFullTextSearch.forEach((text, index) => {
         query.andWhere(
           new Brackets((q) =>
-            q.where(`color.firstName like :firstName${index}`, {
-              [`firstName${index}`]: `%${text.trim()}%`,
+            q.where(`color.name like :name${index}`, {
+              [`name${index}`]: `%${text.trim()}%`,
             }),
           ),
         );

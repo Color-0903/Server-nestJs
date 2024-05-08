@@ -34,16 +34,3 @@ export abstract class AbstractEntity {
   @DeleteDateColumn()
   deletedAt: Date;
 }
-
-export abstract class IdColumn {
-  protected constructor(input?: DeepPartial<AbstractEntity>) {
-    if (input) {
-      for (const [key, value] of Object.entries(input)) {
-        (this as any)[key] = value;
-      }
-    }
-  }
-
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-}

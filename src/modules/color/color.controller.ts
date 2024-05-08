@@ -19,6 +19,7 @@ import { Color } from 'src/database/entities/color.entity';
 import { FilterColorDto } from './dtos/filter.dto';
 import { CreateColorDto, UpdateColorDto } from './dtos/color.dto';
 import { UserReq } from 'src/common/decorators/userReq.decorator';
+import { ColorRepository } from './color.repository';
 
 @ApiTags('color')
 @Controller('color')
@@ -32,6 +33,13 @@ export class ColorController {
   async getAll(@Query() filter: FilterColorDto) {
     return this.colorService.getAll(filter);
   }
+
+  @Get(':id')
+  // @Allow(Permission.Authenticated)
+  async getById(@Param('id') id: string) {
+    return ColorRepository.findOneBy({ id });
+  }
+
 
   @Post('')
   @Allow(Permission.Authenticated)
@@ -47,7 +55,7 @@ export class ColorController {
 
   @Delete(':id')
   @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string, @UserReq() userReq: User) {
+  async delete(@Param('id') id: string/* , @UserReq() userReq: User */) {
     return this.colorService.delete(id);
   }
 }

@@ -1,12 +1,17 @@
 import dataSource from 'src/database/data-source';
 import { User } from 'src/database/entities/user.entity';
 import { Brackets } from 'typeorm';
-import { DELETE_TYPE } from '../../common/constants/enum';
-import { FilterUserDto } from './dtos/user.dto';
+import { DELETE_TYPE, USER_TYPE } from '../../common/constants/enum';
+import { FilterUserDto } from './dtos/filter.dto';
 
 export const UserRepository = dataSource.getRepository(User).extend({
   async getAll(filter: FilterUserDto) {
-    const query = UserRepository.createQueryBuilder('user');
+    const query = UserRepository.createQueryBuilder('user')
+    .leftJoinAndSelect('user.asset', 'asset')
+    .where(
+      'user.type = :type',
+      { type: USER_TYPE.USER },
+    );
 
     if (filter.fullTextSearch) {
       const listFullTextSearch = filter.fullTextSearch.split(/　| /);
@@ -14,15 +19,12 @@ export const UserRepository = dataSource.getRepository(User).extend({
         query.andWhere(
           new Brackets((q) =>
             q
-              .where(`user.firstName like :firstName${index}`, {
-                [`firstName${index}`]: `%${text.trim()}%`,
+              .where(`user.identifier like :identifier${index}`, {
+                [`identifier${index}`]: `%${text.trim()}%`,
               })
-              .orWhere(`user.lastName like :lastName${index}`, {
-                [`lastName${index}`]: `%${text.trim()}%`,
-              })
-              .orWhere(`user.email like :email${index}`, {
-                [`email${index}`]: `%${text.trim()}%`,
-              }),
+              // .orWhere(`user.lastName like :lastName${index}`, {
+              //   [`lastName${index}`]: `%${text.trim()}%`,
+              // })
           ),
         );
       });

@@ -1,9 +1,9 @@
 import { Column, DeepPartial, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Product } from './products.entity';
-import { IdColumn } from 'src/common/abstract/abstract.entity';
+import { AbstractEntity } from 'src/common/abstract/abstract.entity';
 
 @Entity('size')
-export class Size  extends IdColumn {
+export class Size  extends AbstractEntity {
   constructor(input?: DeepPartial<Size>) {
     super(input);
   }

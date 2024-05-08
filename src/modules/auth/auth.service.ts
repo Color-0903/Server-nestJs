@@ -22,13 +22,13 @@ export class AuthService {
         identifier: payload.identifier,
         type: payload.type
       },
-      select: ['passwordHash']
+      select: ['passwordHash', 'id', 'displayName', 'identifier']
     })
     if(!user) throw new UnauthorizedException();
     const passMatch= this.passwordCipher.check(payload.password, user.passwordHash);
     if(!passMatch) throw new UnauthorizedException();
 
-    return this.encode(user)
+    return this.encode(user);
   }
 
   public async register(payload: RegisterUserDto, roleCode: string){
@@ -47,7 +47,7 @@ export class AuthService {
   public async profile(userId: string) {
     const user = await UserRepository.findOne({
       where: { id: userId },
-      relations: ['roles'],
+      relations: ['roles', 'asset'],
     });
     return user;
   }
@@ -71,6 +71,7 @@ export class AuthService {
     const payload = {
       id: user.id,
       identifier: user.identifier,
+      displayName: user?.displayName
     };
     return this.jwtService.sign(payload, {
       expiresIn: process.env.JWT_EXPIRES_IN,

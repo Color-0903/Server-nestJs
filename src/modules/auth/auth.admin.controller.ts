@@ -13,19 +13,19 @@ import { UserReq } from 'src/common/decorators/userReq.decorator';
 export class AuthAdminController {
   constructor(private authService: AuthService) {}
 
-  @Post('admin/login')
+  @Post('/login')
   @ApiOperation({ summary: 'Login' })
-  public async adminLogin(
+  public async login(
     @Body() payload: LoginDto,
   ): Promise<LoginResponseDto> {
     payload.type = USER_TYPE.ADMIN;
     return await this.authService.authenticate(payload);
   }
 
-  @Get('admin/me')
+  @Get('/me')
   @ApiOperation({ summary: 'Me' })
   @UseGuards(JwtAuthGuard)
-  public async userMe(@UserReq() userReq: User): Promise<User> {
+  public async me(@UserReq() userReq: User): Promise<User> {
     const user = await this.authService.profile(userReq.id); 
     if(!user) throw new UnauthorizedException()
     return user;

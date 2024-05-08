@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { PasswordCipher } from '../../common/utils/password-cipher';
 import { Permission } from '../permission';
 import { RoleRepository } from '../role/role.repository';
 import { RoleService } from '../role/role.service';
-import { CreateUserDto } from './dtos/create.dto';
-import { FilterUserDto } from './dtos/user.dto';
+import { CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './dtos/user.dto';
+import { FilterUserDto } from './dtos/filter.dto';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -33,7 +33,6 @@ export class UserService {
         process.env.INITIAL_ADMIN_PASSWORD,
       );
 
-      console.log(AdminRole)
       await UserRepository.save({
         identifier: process.env.INITIAL_ADMIN_IDENTIFIER,
         passwordHash: passwordHash,
@@ -62,6 +61,33 @@ export class UserService {
     } catch (error) {
       throw new BadRequestException(error);
     }
+  }
+
+  public async update(id: string, dto: UpdateUserDto) {
+    try {
+      await UserRepository.save({ id, ...dto });
+      return {
+        result: RESPONSE_MESSAGER.SUCCESS,
+      };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  public async changePassword(id: string, dto: UpdatePasswordDto){
+    const user = await UserRepository.findOne({ where: { id }, select: ['passwordHash'] });
+    if(!user) throw new NotFoundException();
+
+    const passMatch = await this.passwordCipher.check(dto.current, user.passwordHash);
+
+    if(!passMatch) throw new BadRequestException("CURRENT_PASS_NOT_CORRECT");
+
+    const passwordHash = await this.passwordCipher.hash(dto.new);
+    await UserRepository.update(id, { passwordHash });
+
+    return {
+      result: RESPONSE_MESSAGER.SUCCESS,
+    };
   }
 
   public async getAll(filter: FilterUserDto) {

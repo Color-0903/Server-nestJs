@@ -12,8 +12,8 @@ export const SizeRepository = dataSource.getRepository(Size).extend({
       listFullTextSearch.forEach((text, index) => {
         query.andWhere(
           new Brackets((q) =>
-            q.where(`size.firstName like :firstName${index}`, {
-              [`firstName${index}`]: `%${text.trim()}%`,
+            q.where(`size.name like :name${index}`, {
+              [`name${index}`]: `%${text.trim()}%`,
             }),
           ),
         );

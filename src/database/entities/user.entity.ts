@@ -38,6 +38,21 @@ export class User extends AbstractEntity {
   // lastLogin: Date | null;
 
   @Column({ nullable: true })
+  displayName: string;
+  
+  @Column({ nullable: true })
+  dob: Date;
+  
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  address_detail: string;
+  
+  @Column({ nullable: true })
   assetId: boolean;
 
   @ManyToMany(() => Role, (role) => role.users, {
@@ -47,7 +62,7 @@ export class User extends AbstractEntity {
 
   @ManyToOne(() => Asset, { nullable: true })
   @JoinColumn({ name: 'assetId' })
-  Asset?: Asset;
+  asset?: Asset;
 
   @OneToOne(() => Order, (p) => p.user, {
     onDelete: 'CASCADE',

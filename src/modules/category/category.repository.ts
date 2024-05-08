@@ -12,8 +12,8 @@ export const CategoryRepository = dataSource.getRepository(Category).extend({
       listFullTextSearch.forEach((text, index) => {
         query.andWhere(
           new Brackets((q) =>
-            q.where(`cate.firstName like :firstName${index}`, {
-              [`firstName${index}`]: `%${text.trim()}%`,
+            q.where(`cate.name like :name${index}`, {
+              [`name${index}`]: `%${text.trim()}%`,
             }),
           ),
         );

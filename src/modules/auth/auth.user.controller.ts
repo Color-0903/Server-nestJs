@@ -15,25 +15,25 @@ import { UserReq } from 'src/common/decorators/userReq.decorator';
 export class AuthUserController {
   constructor(private authService: AuthService) {}
 
-  @Post('user/login')
+  @Post('login')
   @ApiOperation({ summary: 'Login' })
-  public async userLogin(
+  public async login(
     @Body() payload: LoginDto,
   ): Promise<LoginResponseDto> {
     payload.type = USER_TYPE.USER;
     return await this.authService.authenticate(payload);
   }
 
-  @Get('user/me')
+  @Get('me')
   @ApiOperation({ summary: 'Me' })
   @UseGuards(JwtAuthGuard)
-  public async userMe(@UserReq() userReq: User): Promise<User> {
+  public async me(@UserReq() userReq: User): Promise<User> {
     const user = await this.authService.profile(userReq.id); 
     if(!user) throw new UnauthorizedException()
     return user;
   }
 
-  @Get('user/register')
+  @Get('register')
   @ApiOperation({ summary: 'Register' })
   public async userRegister(payload: RegisterUserDto) {
     return await this.authService.register(payload, Permission.Customer.name);

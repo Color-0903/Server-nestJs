@@ -13,10 +13,14 @@ import { SizeModule } from './modules/size/size.module';
 import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { AssetModule } from './modules/asset/asset.module';
+import { AssetServerPlugin } from './plugins/asset/asset.module';
+import  * as path from 'path';
+import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
+import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
+import { AuthorizationGuard } from './common/guards/authorization.guard';
 
 @Module({
   imports: [
-    InitializerModule,
     CommonModule,
     TypeOrmModule.forRoot(dataSource),
     AuthModule,
@@ -27,13 +31,28 @@ import { AssetModule } from './modules/asset/asset.module';
     ProductModule,
     RoleModule,
     AssetModule,
+    AssetServerPlugin.init({
+      route: process.env.S3_FOLDER,
+      assetUploadDir: path.join(__dirname, '../static/assets'),
+      namingStrategy: new S3NamingStrategy(),
+      // Configure if using S3 AWS
+      storageStrategyFactory: configureS3AssetStorage({
+        bucket: process.env.S3_BUCKET_NAME,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID,
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        },
+      }),
+    }),
+
+    InitializerModule,
     PermissionModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: PermissionModule,
+      useClass: AuthorizationGuard,
     },
   ],
 })

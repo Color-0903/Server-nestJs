@@ -1,11 +1,11 @@
 import { Column, DeepPartial, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Order } from './order.entity';
-import { IdColumn } from 'src/common/abstract/abstract.entity';
+import { AbstractEntity } from 'src/common/abstract/abstract.entity';
 import { Asset } from './asset.entity';
 
-@Entity('orderDetail')
-export class OrderDetail extends IdColumn {
-  constructor(input?: DeepPartial<OrderDetail>) {
+@Entity('order_detail')
+export class Order_detail extends AbstractEntity {
+  constructor(input?: DeepPartial<Order_detail>) {
     super(input);
   }
   @Column()

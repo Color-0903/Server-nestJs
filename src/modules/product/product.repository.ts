@@ -12,8 +12,8 @@ export const ProductRepository = dataSource.getRepository(Product).extend({
           listFullTextSearch.forEach((text, index) => {
             query.andWhere(
               new Brackets((q) =>
-                q.where(`product.firstName like :firstName${index}`, {
-                  [`firstName${index}`]: `%${text.trim()}%`,
+                q.where(`product.name like :name${index}`, {
+                  [`name${index}`]: `%${text.trim()}%`,
                 }),
               ),
             );

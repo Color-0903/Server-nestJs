@@ -22,7 +22,6 @@ export class CategoryService {
       const findCategory = await CategoryRepository.findOneBy({ name: dto.name });
       if (!!findCategory) throw new ConflictException();
 
-      console.log(dto)
       return await CategoryRepository.save(dto);
     } catch (error) {
       throw new BadRequestException(error);

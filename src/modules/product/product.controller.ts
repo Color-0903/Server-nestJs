@@ -19,6 +19,7 @@ import { CreateProductDto, UpdateProductDto } from './dtos/product.dto';
 import { UserReq } from 'src/common/decorators/userReq.decorator';
 import { ProductService } from './product.service';
 import { Product } from 'src/database/entities/products.entity';
+import { ProductRepository } from './product.repository';
 
 @ApiTags('product')
 @Controller('product')
@@ -32,7 +33,11 @@ export class ProductController {
   async getAll(@Query() filter: FilterProductDto) {
     return this.productService.getAll(filter);
   }
-
+  @Get(':id')
+  // @Allow(Permission.Authenticated)
+  async getById(@Param('id') id: string) {
+    return ProductRepository.findOneBy({ id });
+  }
   @Post('')
   @Allow(Permission.Authenticated)
   async create(@Body() dto: CreateProductDto) {

@@ -10,15 +10,14 @@ import { AbstractEntity } from '../../common/abstract/abstract.entity';
 import { Product } from './products.entity';
 
 @Entity()
-@Tree('materialized-path')
 export class Asset extends AbstractEntity {
   constructor(input?: DeepPartial<Asset>) {
     super(input);
   }
 
-  @Column() name: string;
+  @Column({ nullable: true }) name: string;
 
-  @Column('varchar') type: AssetType;
+  @Column('varchar') type: string;
 
   @Column({ nullable: true }) mimeType: string;
 

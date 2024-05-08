@@ -7,6 +7,8 @@ import { Readable, Stream } from 'stream';
 import { v4 as uuidv4 } from 'uuid';
 import { AssetType } from '../../common/constants/enum';
 import { ConfigService } from '../../plugins/config/config.service';
+import { AssetRepository } from './asset.repository';
+import { UserRepository } from '../user/user.repository';
 const sizeOf = require('image-size');
 
 @Injectable()
@@ -21,16 +23,16 @@ export class AssetService {
         const [type, subtype] = val.split('/');
         return { type, subtype };
       });
-
   }
 
-  async create(file: Express.Multer.File) {
+  async create(file: Express.Multer.File, userId: string, oldFile?: string) {
     return new Promise(async (resolve, reject) => {
       let { buffer, originalname: filename, mimetype } = file;
 
       const prefix = Date.now() + '-' + uuidv4();
       const suffixes = mimetype.split('/')[1] || 'png';
 
+      const oldName = filename;
       filename = `${prefix}.${suffixes}`;
 
       const stream = Readable.from(buffer);
@@ -39,7 +41,14 @@ export class AssetService {
       });
       let result: any;
       try {
-        result = await this.createAssetInternal(stream, filename, mimetype);
+        result = await this.createAssetInternal(
+          stream,
+          filename,
+          mimetype,
+          oldName,
+          userId,
+          oldFile,
+        );
       } catch (e) {
         reject(e);
         return;
@@ -48,28 +57,56 @@ export class AssetService {
     });
   }
 
-  private async createAssetInternal(stream: Stream, filename: string, mimetype: string) {
+  private async createAssetInternal(
+    stream: Stream,
+    fileName: string,
+    mimetype: string,
+    oldName: string,
+    userId: string,
+    oldFile?: string,
+  ) {
     const { assetOptions } = this.configService;
     if (!this.validateMimeType(mimetype)) {
       throw new Error('MimeTypeError');
     }
     const { assetStorageStrategy } = assetOptions;
-    let sourceFileName = await this.getSourceFileName(filename);
-    const sourceFileIdentifier = await assetStorageStrategy.writeFileFromStream(sourceFileName, stream, mimetype);
-    const sourceFile = await assetStorageStrategy.readFileToBuffer(sourceFileIdentifier);
+    let sourceFileName = await this.getSourceFileName(fileName);
+    const sourceFileIdentifier = await assetStorageStrategy.writeFileFromStream(
+      sourceFileName,
+      stream,
+      mimetype,
+    );
+    const sourceFile =
+      await assetStorageStrategy.readFileToBuffer(sourceFileIdentifier);
 
     const type = getAssetType(mimetype);
-    const { width, height } = type === AssetType.IMAGE ? this.getDimensions(sourceFile) : { width: 0, height: 0 };
+    const { width, height } =
+      type === AssetType.IMAGE
+        ? this.getDimensions(sourceFile)
+        : { width: 0, height: 0 };
 
-    const asset = new Asset();
-    Object.assign(asset, {
+    const asset = new Asset({
+      type,
+      width,
+      height,
+      mimeType: mimetype,
       source: sourceFileIdentifier,
-      type: type,
-      width: width,
-      height: height,
-      mineType: mimetype,
+      name: oldName,
     });
-    // return this.baseService.create(asset);
+
+    const response = await AssetRepository.save(asset);
+
+    await UserRepository.save({ id: userId, asset: response });
+    if (oldFile) {
+      Promise.all([
+        this.deleteFile(oldFile),
+        AssetRepository.delete({
+          source: oldFile,
+        }),
+      ]);
+    }
+
+    return response;
   }
 
   private getDimensions(imageFile: Buffer): { width: number; height: number } {
@@ -100,13 +137,6 @@ export class AssetService {
     );
   }
 
-  private async getPreviewFileName(fileName: string): Promise<string> {
-    const { assetOptions } = this.configService;
-    return this.generateUniqueName(fileName, (name, conflict) =>
-      assetOptions.assetNamingStrategy.generatePreviewFileName(name, conflict),
-    );
-  }
-
   private async generateUniqueName(
     inputFileName: string,
     generateNameFn: (fileName: string, conflictName?: string) => string,
@@ -115,7 +145,16 @@ export class AssetService {
     let outputFileName: string | undefined;
     do {
       outputFileName = generateNameFn(inputFileName, outputFileName);
-    } while (await assetOptions.assetStorageStrategy.fileExists(outputFileName));
+    } while (
+      await assetOptions.assetStorageStrategy.fileExists(outputFileName)
+    );
     return outputFileName;
+  }
+
+  public async deleteFile(identifier: string) {
+    const { assetOptions } = this.configService;
+    const { assetStorageStrategy } = assetOptions;
+
+    return assetStorageStrategy.deleteFile(identifier);
   }
 }

@@ -18,6 +18,7 @@ import { Permission } from '../permission';
 import { FilterSizeDto } from './dtos/filter.dto';
 import { CreateSizeDto, UpdateSizeDto } from './dtos/size';
 import { SizeService } from './size.service';
+import { SizeRepository } from './size.repository';
 
 @ApiTags('size')
 @Controller('size')
@@ -30,6 +31,12 @@ export class SizeController {
   // @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterSizeDto) {
     return this.categoryService.getAll(filter);
+  }
+
+  @Get(':id')
+  // @Allow(Permission.Authenticated)
+  async getById(@Param('id') id: string) {
+    return SizeRepository.findOneBy({ id });
   }
 
   @Post('')
@@ -46,7 +53,7 @@ export class SizeController {
 
   @Delete(':id')
   @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string, @UserReq() userReq: User) {
+  async delete(@Param('id') id: string/* , @UserReq() userReq: User */) {
     return this.categoryService.delete(id);
   }
 }
