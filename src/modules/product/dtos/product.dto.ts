@@ -1,6 +1,17 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Category } from 'src/database/entities/category.entity';
 import { Color } from 'src/database/entities/color.entity';
 import { Size } from 'src/database/entities/size.entity';
@@ -25,11 +36,25 @@ export class CreateProductDto {
   @Transform(({ value }) => Boolean(value))
   readonly status: boolean;
 
-  @ApiProperty({ name: 'price', type: Number })
+  @ApiProperty({ name: 'price_in', type: Number })
   @IsNumber()
   @IsNotEmpty()
   @Transform(({ value }) => Number(value.toString().trim()))
-  readonly price: number;
+  readonly price_in: number;
+
+  @ApiProperty({ name: 'price_out', type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value.toString().trim()))
+  readonly price_out: number;
+
+  @ApiProperty({ name: 'sale_off', type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  @Max(10)
+  @Transform(({ value }) => Number(value.toString().trim()))
+  readonly sale_off: number;
 
   @ApiProperty({ name: 'isHidden', type: Boolean })
   @IsBoolean()
