@@ -1,4 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
@@ -12,6 +12,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { Asset } from 'src/database/entities/asset.entity';
 import { Category } from 'src/database/entities/category.entity';
 import { Color } from 'src/database/entities/color.entity';
 import { Size } from 'src/database/entities/size.entity';
@@ -62,20 +63,25 @@ export class CreateProductDto {
   @Transform(({ value }) => Boolean(value))
   readonly isHidden: boolean;
 
-  @ApiProperty({ name: 'sizes', type: Array(Size) })
+  @ApiPropertyOptional({ name: 'sizes', type: Array(Size) })
   @IsArray()
   @Type(() => Size)
-  readonly sizes: Size[];
+  readonly sizes?: Size[];
 
-  @ApiProperty({ name: 'categories', type: Array(Category) })
+  @ApiPropertyOptional({ name: 'categories', type: Array(Category) })
   @IsArray()
   @Type(() => Category)
-  readonly categories: Category[];
+  readonly categories?: Category[];
 
-  @ApiProperty({ name: 'colors', type: Array(Color) })
+  @ApiPropertyOptional({ name: 'colors', type: Array(Color) })
   @IsArray()
   @Type(() => Color)
-  readonly colors: Color[];
+  readonly colors?: Color[];
+
+  @ApiPropertyOptional({ name: 'assets', type: Array(Asset) })
+  @IsArray()
+  @Type(() => Asset)
+  readonly assets?: Asset[];
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

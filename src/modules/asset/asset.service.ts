@@ -1,14 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { isNil } from 'lodash';
 import * as mime from 'mime-types';
 import { getAssetType } from 'src/common/utils/function-util';
 import { Asset } from 'src/database/entities/asset.entity';
 import { Readable, Stream } from 'stream';
 import { v4 as uuidv4 } from 'uuid';
-import { AssetType } from '../../common/constants/enum';
+import { AssetType, RESPONSE_MESSAGER } from '../../common/constants/enum';
 import { ConfigService } from '../../plugins/config/config.service';
-import { AssetRepository } from './asset.repository';
+import { ProductRepository } from '../product/product.repository';
 import { UserRepository } from '../user/user.repository';
+import { AssetRepository } from './asset.repository';
+import { DeleteFileDto } from './dtos/upload.dto';
 const sizeOf = require('image-size');
 
 @Injectable()
@@ -25,7 +27,7 @@ export class AssetService {
       });
   }
 
-  async create(file: Express.Multer.File, userId: string, oldFile?: string) {
+  async create(file: Express.Multer.File) {
     return new Promise(async (resolve, reject) => {
       let { buffer, originalname: filename, mimetype } = file;
 
@@ -46,8 +48,6 @@ export class AssetService {
           filename,
           mimetype,
           oldName,
-          userId,
-          oldFile,
         );
       } catch (e) {
         reject(e);
@@ -62,8 +62,6 @@ export class AssetService {
     fileName: string,
     mimetype: string,
     oldName: string,
-    userId: string,
-    oldFile?: string,
   ) {
     const { assetOptions } = this.configService;
     if (!this.validateMimeType(mimetype)) {
@@ -95,16 +93,6 @@ export class AssetService {
     });
 
     const response = await AssetRepository.save(asset);
-
-    await UserRepository.save({ id: userId, asset: response });
-    if (oldFile) {
-      Promise.all([
-        this.deleteFile(oldFile),
-        AssetRepository.delete({
-          source: oldFile,
-        }),
-      ]);
-    }
 
     return response;
   }
@@ -151,10 +139,34 @@ export class AssetService {
     return outputFileName;
   }
 
-  public async deleteFile(identifier: string) {
+  public async deleteFile(id: string, dto: DeleteFileDto) {
     const { assetOptions } = this.configService;
     const { assetStorageStrategy } = assetOptions;
 
-    return assetStorageStrategy.deleteFile(identifier);
+    try {
+      if (dto?.oldSource) {
+        await Promise.all([
+          assetStorageStrategy.deleteFile(dto?.oldSource),
+          AssetRepository.delete(id),
+        ]);
+      }
+
+      if (dto?.updateFor?.table == 'user') {
+        await UserRepository.save({
+          id: dto?.updateFor?.id,
+          asset: dto?.updateFor?.asset,
+        });
+      } else if (dto?.updateFor?.table == 'product') {
+        await ProductRepository.save({
+          id: dto?.updateFor?.id,
+          assets: dto?.updateFor?.assets,
+        });
+      }
+      return {
+        result: RESPONSE_MESSAGER.SUCCESS,
+      };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 }

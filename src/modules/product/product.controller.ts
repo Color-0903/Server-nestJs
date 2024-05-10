@@ -36,7 +36,15 @@ export class ProductController {
   @Get(':id')
   // @Allow(Permission.Authenticated)
   async getById(@Param('id') id: string) {
-    return ProductRepository.findOneBy({ id });
+    return ProductRepository.findOne({
+      where: { id },
+      relations: {
+        assets: true,
+        categories: true,
+        colors: true,
+        sizes: true,
+      },
+    });
   }
   @Post('')
   @Allow(Permission.Authenticated)

@@ -13,15 +13,11 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Allow } from '../auth/guards/allow.decorator';
 import { Permission } from '../permission';
 import { AssetService } from './asset.service';
-import { CreateFolderDto } from './dtos/create-folder.dto';
-import { UploadDto } from './dtos/upload.dto';
-import { Allow } from '../auth/guards/allow.decorator';
-import { AssetRepository } from './asset.repository';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { UserReq } from 'src/common/decorators/userReq.decorator';
-import { User } from 'src/database/entities/user.entity';
+import { DeleteFileDto, UploadDto } from './dtos/upload.dto';
 const fetch = require('node-fetch');
 
 @ApiTags('assets')
@@ -60,9 +56,8 @@ export class AssetController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Body() payload: UploadDto,
-    @UserReq() userR: User,
   ) {
-    return this.assetService.create(file, userR.id, payload?.oldFile);
+    return this.assetService.create(file);
   }
 
   // @Post('create-folder')
@@ -70,4 +65,10 @@ export class AssetController {
   // createFolder(@Body() payload: CreateFolderDto) {
   //   return this.assetService.createFolder(payload);
   // }
+
+  @Delete(':id')
+  @Allow(Permission.Authenticated)
+  async delete(@Body() dto: DeleteFileDto) {
+    return await this.assetService.deleteFile(dto.id, dto);
+  }
 }
