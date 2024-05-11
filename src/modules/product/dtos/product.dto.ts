@@ -49,11 +49,17 @@ export class CreateProductDto {
   @Transform(({ value }) => Number(value.toString().trim()))
   readonly price_out: number;
 
+  @ApiProperty({ name: 'price_view', type: Number })
+  @IsNumber()
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value.toString().trim()))
+  readonly price_view: number;
+
   @ApiProperty({ name: 'sale_off', type: Number })
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
-  @Max(10)
+  @Max(100)
   @Transform(({ value }) => Number(value.toString().trim()))
   readonly sale_off: number;
 
@@ -64,21 +70,25 @@ export class CreateProductDto {
   readonly isHidden: boolean;
 
   @ApiPropertyOptional({ name: 'sizes', type: Array(Size) })
+  @IsOptional()
   @IsArray()
   @Type(() => Size)
   readonly sizes?: Size[];
 
   @ApiPropertyOptional({ name: 'categories', type: Array(Category) })
+  @IsOptional()
   @IsArray()
   @Type(() => Category)
   readonly categories?: Category[];
 
   @ApiPropertyOptional({ name: 'colors', type: Array(Color) })
+  @IsOptional()
   @IsArray()
   @Type(() => Color)
   readonly colors?: Color[];
 
   @ApiPropertyOptional({ name: 'assets', type: Array(Asset) })
+  @IsOptional()
   @IsArray()
   @Type(() => Asset)
   readonly assets?: Asset[];

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 import { Asset } from 'src/database/entities/asset.entity';
 
 export class UploadDto {
@@ -8,10 +9,10 @@ export class UploadDto {
 }
 
 class UpdateFor {
-  @ApiPropertyOptional({ type: 'string', name: 'id' })
+  @ApiPropertyOptional({ type: String, name: 'id' })
   id: string;
 
-  @ApiPropertyOptional({ type: 'string', name: 'table' })
+  @ApiPropertyOptional({ type: String, name: 'table' })
   table: string;
 
   @ApiPropertyOptional({ type: Asset, name: 'asset' })
@@ -22,13 +23,16 @@ class UpdateFor {
 }
 
 export class DeleteFileDto {
-  @ApiPropertyOptional({ type: 'string', name: 'id' })
+  @ApiPropertyOptional({ type: String, name: 'id', })
+  @IsNotEmpty()
   id: string;
   
-  @ApiPropertyOptional({ type: 'string', name: 'oldSource' })
+  @ApiPropertyOptional({ type: String, name: 'oldSource' })
+  @IsOptional()
   oldSource?: string;
 
   @ApiPropertyOptional({ type: UpdateFor, name: 'updateFor' })
+  @IsNotEmpty()
   @Type(() => UpdateFor)
   updateFor: UpdateFor;
 }

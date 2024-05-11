@@ -18,6 +18,7 @@ import  * as path from 'path';
 import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
 import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
 import { AuthorizationGuard } from './common/guards/authorization.guard';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthorizationGuard } from './common/guards/authorization.guard';
     CategoryModule,
     SizeModule,
     ProductModule,
+    OrderModule,
     RoleModule,
     AssetModule,
     AssetServerPlugin.init({

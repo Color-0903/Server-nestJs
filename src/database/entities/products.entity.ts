@@ -32,6 +32,9 @@ export class Product extends AbstractEntity {
   @Column({ type: 'float' })
   price_out: number;
 
+  @Column({ type: 'float' })
+  price_view: number;
+
   @Column({ default: 0 })
   sale_off: number;
 

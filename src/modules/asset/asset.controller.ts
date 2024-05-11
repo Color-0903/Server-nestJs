@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -18,6 +19,8 @@ import { Allow } from '../auth/guards/allow.decorator';
 import { Permission } from '../permission';
 import { AssetService } from './asset.service';
 import { DeleteFileDto, UploadDto } from './dtos/upload.dto';
+import { Asset } from 'src/database/entities/asset.entity';
+import { CreateProductDto } from '../product/dtos/product.dto';
 const fetch = require('node-fetch');
 
 @ApiTags('assets')
@@ -56,8 +59,8 @@ export class AssetController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Body() payload: UploadDto,
-  ) {
-    return this.assetService.create(file);
+  ): Promise<Asset> {
+    return (await this.assetService.create(file)) as Asset;
   }
 
   // @Post('create-folder')
@@ -69,6 +72,6 @@ export class AssetController {
   @Delete(':id')
   @Allow(Permission.Authenticated)
   async delete(@Body() dto: DeleteFileDto) {
-    return await this.assetService.deleteFile(dto.id, dto);
+    return this.assetService.deleteFile(dto?.id, dto);
   }
 }

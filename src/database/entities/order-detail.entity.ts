@@ -1,39 +1,35 @@
-import { Column, DeepPartial, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { Order } from './order.entity';
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import { Asset } from './asset.entity';
+import {
+  Column,
+  DeepPartial,
+  Entity,
+  JoinColumn,
+  ManyToOne
+} from 'typeorm';
+import { Order } from './order.entity';
+import { String } from 'aws-sdk/clients/acm';
 
 @Entity('order_detail')
 export class Order_detail extends AbstractEntity {
   constructor(input?: DeepPartial<Order_detail>) {
     super(input);
   }
-  @Column()
-  name: string;
+  @Column({ nullable: true })
+  size: String;
 
-  @Column({ type: 'text' })
-  description: string;
+  @Column({ nullable: true })
+  quantity: number;
 
-  @Column()
-  size: string;
+  @Column({ nullable: true, length: 20 })
+  color: string;
 
-  @Column()
-  quantity: string;
-
-  @Column()
-  price: string;
+  @Column({ nullable: true })
+  price: number;
 
   @Column({ length: 36 })
   orderId: string;
 
-  @Column({ length: 36 })
-  assetId: string;
-
   @ManyToOne(() => Order, { nullable: true })
   @JoinColumn({ name: 'orderId' })
   order?: Order;
-
-  @ManyToOne(() => Asset, { nullable: true })
-  @JoinColumn({ name: 'assetId' })
-  Asset?: Asset;
 }

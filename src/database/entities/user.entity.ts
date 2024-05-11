@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne
 } from 'typeorm';
 import { Asset } from './asset.entity';
@@ -64,7 +65,7 @@ export class User extends AbstractEntity {
   @JoinColumn({ name: 'assetId' })
   asset?: Asset;
 
-  @OneToOne(() => Order, (p) => p.user, {
+  @OneToMany(() => Order, (p) => p.user, {
     onDelete: 'CASCADE',
   })
   order: Order;

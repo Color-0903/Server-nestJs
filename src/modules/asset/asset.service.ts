@@ -92,9 +92,7 @@ export class AssetService {
       name: oldName,
     });
 
-    const response = await AssetRepository.save(asset);
-
-    return response;
+    return await AssetRepository.save(asset);
   }
 
   private getDimensions(imageFile: Buffer): { width: number; height: number } {
