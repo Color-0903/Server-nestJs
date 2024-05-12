@@ -24,6 +24,12 @@ export class Order extends AbstractEntity  {
   @Column({ nullable: true })
   asset: string;
 
+  @Column({  type: 'text', nullable: true })
+  address: string;
+
+  @Column({ nullable: true, length: 11 })
+  phone: string;
+
   @Column({ length: 36 })
   userId: string;
 

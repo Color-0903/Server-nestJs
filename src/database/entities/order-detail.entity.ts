@@ -1,11 +1,5 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  JoinColumn,
-  ManyToOne
-} from 'typeorm';
+import { Column, DeepPartial, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Order } from './order.entity';
 import { String } from 'aws-sdk/clients/acm';
 
@@ -29,7 +23,11 @@ export class Order_detail extends AbstractEntity {
   @Column({ length: 36 })
   orderId: string;
 
-  @ManyToOne(() => Order, { nullable: true })
+  @ManyToOne(() => Order, {
+    nullable: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ name: 'orderId' })
   order?: Order;
 }

@@ -12,6 +12,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
 } from 'class-validator';
 import { ORDER_STATUS } from 'src/common/constants/enum';
 export class OrderDetail {
@@ -33,12 +34,30 @@ export class OrderDetail {
   @Transform(({ value }) => String(value.toString().trim()))
   readonly price?: number;
 
+  @ApiPropertyOptional({ name: 'color', type: String })
+  @IsOptional()
+  @Transform(({ value }) => String(value.toString().trim()))
+  readonly color?: string;
+
   @ApiPropertyOptional({ name: 'asset', type: String })
   @IsOptional()
   @Transform(({ value }) => String(value.toString().trim()))
   readonly asset?: string;
 }
 export class CreateOrderDto {
+  @ApiPropertyOptional({ name: 'phone', type: String })
+  @IsOptional()
+  @IsString()
+  @MaxLength(11)
+  @Transform(({ value }) => String(value.toString().trim()))
+  readonly phone?: string;
+
+  @ApiPropertyOptional({ name: 'address', type: String })
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => String(value.toString().trim()))
+  readonly address?: string;
+
   @ApiPropertyOptional({ name: 'name', type: String })
   @IsOptional()
   @Transform(({ value }) => String(value.toString().trim()))

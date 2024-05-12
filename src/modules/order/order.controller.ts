@@ -37,6 +37,10 @@ export class OrderController {
   async getById(@Param('id') id: string) {
     return OrderRepository.findOne({
       where: { id },
+      relations:{
+        order_detail: true,
+         user: true
+      }
     });
   }
   @Post('')
