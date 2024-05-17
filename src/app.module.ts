@@ -1,24 +1,25 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 import { CommonModule } from './common/common.module';
+import { AuthorizationGuard } from './common/guards/authorization.guard';
 import { dataSource } from './database/data-source';
+import { AssetModule } from './modules/asset/asset.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ColorModule } from './modules/color/color.module';
 import { InitializerModule } from './modules/initializer/initializer.module';
+import { OrderModule } from './modules/order/order.module';
+import { OtpModule } from './modules/otp/otp.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { ProductModule } from './modules/product/product.module';
 import { RoleModule } from './modules/role/role.module';
 import { SizeModule } from './modules/size/size.module';
 import { UserModule } from './modules/user/user.module';
-import { ProductModule } from './modules/product/product.module';
-import { AssetModule } from './modules/asset/asset.module';
 import { AssetServerPlugin } from './plugins/asset/asset.module';
-import  * as path from 'path';
-import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
 import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
-import { AuthorizationGuard } from './common/guards/authorization.guard';
-import { OrderModule } from './modules/order/order.module';
+import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { OrderModule } from './modules/order/order.module';
     ProductModule,
     OrderModule,
     RoleModule,
+    OtpModule,
     AssetModule,
     AssetServerPlugin.init({
       route: process.env.S3_FOLDER,

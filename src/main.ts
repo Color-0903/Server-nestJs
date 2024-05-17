@@ -8,10 +8,8 @@ import { setupSwagger } from './swagger';
 
 async function bootstrap() {
   await dataSource.initialize();
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
-  });
-
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors();
   setupSwagger(app);
 
   // Global Interceptor

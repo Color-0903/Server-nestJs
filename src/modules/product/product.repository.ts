@@ -20,7 +20,17 @@ export const ProductRepository = dataSource.getRepository(Product).extend({
             );
           });
         }
-    
+
+        if (filter?.categories) {
+          query.leftJoinAndSelect('product.categories', 'categories')
+          if (Array.isArray(filter.categories)) {
+            if (filter.categories.length > 0) {
+              query.andWhere('categories.id IN (:...categories)', { categories: filter.categories });
+            }
+          } else query.andWhere('categories.id = :categories', { categories: filter.categories });
+        }
+
+        
         const result = await query.toPaginationResponse({
           size: filter.size,
           page: filter.page,
