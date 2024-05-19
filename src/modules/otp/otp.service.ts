@@ -1,20 +1,27 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { addMinutes, isBefore } from 'date-fns';
 import * as nodemailer from 'nodemailer';
-import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
+import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { FilterOtpDto } from './dtos/filter.dto';
 import { CreateOtpDto } from './dtos/otp.dto';
 import { OtpRepository } from './otp.repository';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class OtpService {
   constructor() {}
 
   public async create(dto: CreateOtpDto) {
+
+    const record = await UserRepository.findOneBy({ identifier: dto?.identifier, type: USER_TYPE.USER });
+    if(!!record?.id && dto?.type == 'register') throw new ConflictException();
+    else if(!record?.id && dto?.type == 'forgot') throw new NotFoundException();
+
     const otp = this.generateOtpCode(6);
     const transporter = nodemailer.createTransport({
       service: 'gmail',

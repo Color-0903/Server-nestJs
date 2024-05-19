@@ -42,7 +42,7 @@ export class AuthUserController {
     return user;
   }
 
-  @Get('register')
+  @Post('register')
   @ApiOperation({ summary: 'Register' })
   public async register(@Body() payload: RegisterUserDto) {
     return await this.authService.register(

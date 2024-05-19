@@ -24,8 +24,9 @@ export class AuthService {
       },
       select: ['passwordHash', 'id', 'displayName', 'identifier']
     })
+
     if(!user) throw new UnauthorizedException();
-    const passMatch= this.passwordCipher.check(payload.password, user.passwordHash);
+    const passMatch = await this.passwordCipher.check(payload.password, user.passwordHash);
     if(!passMatch) throw new UnauthorizedException();
 
     return this.encode(user);
