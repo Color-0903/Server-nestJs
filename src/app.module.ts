@@ -20,6 +20,7 @@ import { UserModule } from './modules/user/user.module';
 import { AssetServerPlugin } from './plugins/asset/asset.module';
 import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
 import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
+import { BannerModule } from './modules/banner/banner.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
     OrderModule,
     RoleModule,
     OtpModule,
+    BannerModule,
     AssetModule,
     AssetServerPlugin.init({
       route: process.env.S3_FOLDER,

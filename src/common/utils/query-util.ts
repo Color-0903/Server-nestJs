@@ -53,7 +53,7 @@ SelectQueryBuilder.prototype.toPaginationResponse = async function <Entity>(
   params: PaginationParam,
 ) {
   const alias = this.alias;
-  if (params.sort) {
+    if (params.sort) {
     const sortKeyValue = params.sort.split('-');
     const direction = sortKeyValue[0];
     const key = sortKeyValue[1];
