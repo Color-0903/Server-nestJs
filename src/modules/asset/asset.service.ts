@@ -136,6 +136,19 @@ export class AssetService {
     );
     return outputFileName;
   }
+  public async delete(identifier: string, assetId: string) {
+    const { assetOptions } = this.configService;
+    const { assetStorageStrategy } = assetOptions;
+
+    try {
+      await Promise.all([
+        assetStorageStrategy.deleteFile(identifier),
+        AssetRepository.delete(assetId),
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   public async deleteFile(id: string, dto: DeleteFileDto) {
     const { assetOptions } = this.configService;

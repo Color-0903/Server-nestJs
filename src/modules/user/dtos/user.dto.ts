@@ -52,6 +52,7 @@ export class UpdateUserDto {
   readonly displayName?: string;
 
   @ApiPropertyOptional({ name: 'dob', type: Date })
+  @IsOptional()
   @IsDateString()
   readonly dob?: Date;
 

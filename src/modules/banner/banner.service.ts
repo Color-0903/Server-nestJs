@@ -3,13 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
 import { BannerRepository } from './banner.repository';
 import { CreateBannerDto, UpdateBannerDto } from './dtos/banner';
+import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
+import { AssetService } from '../asset/asset.service';
 
 @Injectable()
 export class BannerService {
-  constructor() {}
+  constructor(private assetService: AssetService) {}
 
   public async create(dto: CreateBannerDto) {
     try {
@@ -20,8 +21,21 @@ export class BannerService {
   }
 
   public async update(id: string, dto: UpdateBannerDto) {
+    const findById = await BannerRepository.findOne({
+      where: { id },
+      relations: { asset: true },
+    });
+    if (!findById) throw new NotFoundException();
+
+    if (dto?.asset?.id !== findById?.assetId) {
+      await this.assetService.delete(
+        findById?.asset?.source,
+        findById?.assetId,
+      );
+    }
+
     try {
-      await BannerRepository.update(id, dto);
+      await BannerRepository.save({ id, ...dto });
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
       };
@@ -30,17 +44,17 @@ export class BannerService {
     }
   }
 
-  public async delete(id: string) {
-    try {
-      const findBanner = await BannerRepository.findOneBy({ id });
-      if (!findBanner) throw new NotFoundException();
+  // public async delete(id: string) {
+  //   try {
+  //     const findBanner = await BannerRepository.findOneBy({ id });
+  //     if (!findBanner) throw new NotFoundException();
 
-      await BannerRepository.delete(id);
-      return {
-        result: RESPONSE_MESSAGER.SUCCESS,
-      };
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
-  }
+  //     await BannerRepository.delete(id);
+  //     return {
+  //       result: RESPONSE_MESSAGER.SUCCESS,
+  //     };
+  //   } catch (error) {
+  //     throw new BadRequestException(error);
+  //   }
+  // }
 }

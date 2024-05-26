@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
 import { Banner } from 'src/database/entities/banner.entity';
@@ -23,17 +15,17 @@ export class BannerController {
   constructor(private categoryService: BannerService) {}
 
   @Get('')
-  @ApiOkResponsePaginated(Banner)
-  // @Allow(Permission.Authenticated)
+  // @ApiOkResponsePaginated(Banner)
+  @Allow(Permission.Authenticated)
   async getAll() {
-    // return this.categoryService.getAll(filter);
+    return BannerRepository.find({ relations: { asset: true }, order: { index: 'ASC' } });
   }
 
-  @Get(':id')
+  // @Get(':id')
   // @Allow(Permission.Authenticated)
-  async getById(@Param('id') id: string) {
-    return BannerRepository.findOneBy({ id });
-  }
+  // async getById(@Param('id') id: string) {
+  //   return BannerRepository.findOneBy({ id });
+  // }
 
   @Post('')
   @Allow(Permission.Authenticated)
@@ -47,9 +39,9 @@ export class BannerController {
     return this.categoryService.update(id, dto);
   }
 
-  @Delete(':id')
-  @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string /* , @UserReq() userReq: User */) {
-    return this.categoryService.delete(id);
-  }
+  // @Delete(':id')
+  // @Allow(Permission.Authenticated)
+  // async delete(@Param('id') id: string /* , @UserReq() userReq: User */) {
+  //   return this.categoryService.delete(id);
+  // }
 }

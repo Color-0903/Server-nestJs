@@ -5,7 +5,7 @@ import {
   Entity,
   JoinColumn,
   JoinTable,
-  OneToOne
+  OneToOne,
 } from 'typeorm';
 import { Asset } from './asset.entity';
 
@@ -15,8 +15,11 @@ export class Banner extends AbstractEntity {
     super(input);
   }
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
+
+  @Column()
+  index: number;
 
   @Column({ type: 'text', nullable: true })
   content: string;
@@ -25,7 +28,9 @@ export class Banner extends AbstractEntity {
   assetId: string;
 
   @OneToOne(() => Asset, {
+    nullable: true,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'assetId' })
   asset: Asset;
