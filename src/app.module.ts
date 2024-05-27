@@ -7,6 +7,8 @@ import { AuthorizationGuard } from './common/guards/authorization.guard';
 import { dataSource } from './database/data-source';
 import { AssetModule } from './modules/asset/asset.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { BannerModule } from './modules/banner/banner.module';
+import { CadastralModule } from './modules/cadastral/cadastral.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ColorModule } from './modules/color/color.module';
 import { InitializerModule } from './modules/initializer/initializer.module';
@@ -20,7 +22,6 @@ import { UserModule } from './modules/user/user.module';
 import { AssetServerPlugin } from './plugins/asset/asset.module';
 import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
 import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
-import { BannerModule } from './modules/banner/banner.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { BannerModule } from './modules/banner/banner.module';
     OtpModule,
     BannerModule,
     AssetModule,
+    CadastralModule,
     AssetServerPlugin.init({
       route: process.env.S3_FOLDER,
       assetUploadDir: path.join(__dirname, '../static/assets'),

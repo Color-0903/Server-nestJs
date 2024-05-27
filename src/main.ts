@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import dataSource from './database/data-source';
 import { setupSwagger } from './swagger';
+import fetch from 'node-fetch';
+import { CadastralRepository } from './modules/cadastral/cadastral.repository';
 
 async function bootstrap() {
   await dataSource.initialize();
@@ -18,7 +20,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       transform: true,
-    })
+    }),
   );
   await app.listen(process.env.PORT || 3303);
 }
