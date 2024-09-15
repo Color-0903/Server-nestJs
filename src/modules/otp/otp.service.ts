@@ -5,22 +5,30 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { addMinutes, isBefore } from 'date-fns';
+import * as moment from 'moment';
 import * as nodemailer from 'nodemailer';
-import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
+import {
+  OTP_TYPE,
+  RESPONSE_MESSAGER,
+  USER_TYPE,
+} from 'src/common/constants/enum';
+import { UserRepository } from '../user/user.repository';
 import { FilterOtpDto } from './dtos/filter.dto';
 import { CreateOtpDto } from './dtos/otp.dto';
 import { OtpRepository } from './otp.repository';
-import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class OtpService {
   constructor() {}
 
-  public async create(dto: CreateOtpDto) {
+  public async create(dto: CreateOtpDto) {    const record = await UserRepository.findOneBy({
+      identifier: dto?.identifier,
+      type: USER_TYPE.USER,
+    });
 
-    const record = await UserRepository.findOneBy({ identifier: dto?.identifier, type: USER_TYPE.USER });
-    if(!!record?.id && dto?.type == 'register') throw new ConflictException();
-    else if(!record?.id && dto?.type == 'forgot') throw new NotFoundException();
+    if (dto?.type == OTP_TYPE.REGISTER && record) throw new ConflictException();
+
+    if (dto?.type == OTP_TYPE.FORGOT && !record) throw new NotFoundException();
 
     const otp = this.generateOtpCode(6);
     const transporter = nodemailer.createTransport({
@@ -38,9 +46,21 @@ export class OtpService {
     });
 
     const expiredTime = addMinutes(new Date(), 5);
-    const findOtp = await OtpRepository.findOneBy({
-      identifier: dto?.identifier,
+
+    const findOtp = await OtpRepository.findOne({
+      where: { identifier: dto?.identifier, used: false },
+      order: { createdOnDate: 'DESC' },
     });
+
+    if (findOtp) {
+      const difference = moment().diff(
+        moment(findOtp.createdOnDate),
+        'minutes',
+      );
+      if (+difference < 5) {
+        throw new BadRequestException('LIMITED_TIME');
+      }
+    }
 
     try {
       await Promise.all([
@@ -50,8 +70,7 @@ export class OtpService {
           subject: 'Mã OTP code',
           html: `<b>Mã OTP của bạn là: ${otp}. Vui lòng bảo mật mã OTP của bạn!</b>`,
         }),
-        OtpRepository.save({
-          ...findOtp,
+        OtpRepository.insert({
           identifier: dto.identifier,
           expired: expiredTime,
           code: otp,
@@ -72,18 +91,18 @@ export class OtpService {
     try {
       const findOtp = await OtpRepository.findOneBy({
         identifier: dto?.identifier,
-        code: dto?.code,
+        // code: dto?.code,
         used: false,
       });
 
       if (!findOtp) throw new NotFoundException();
+
+      if (findOtp?.code !== dto?.code)
+        throw new BadRequestException('OTP_MISMATCH');
+
       if (isBefore(findOtp.expired, new Date()))
         throw new BadRequestException('OTP_EXPIRED');
-      await OtpRepository.save({
-        ...findOtp,
-
-        used: true,
-      });
+   
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
       };

@@ -1,12 +1,10 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors/transformer-interceptor';
-import { ValidationPipe } from '@nestjs/common';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import dataSource from './database/data-source';
 import { setupSwagger } from './swagger';
-import fetch from 'node-fetch';
-import { CadastralRepository } from './modules/cadastral/cadastral.repository';
 
 async function bootstrap() {
   await dataSource.initialize();

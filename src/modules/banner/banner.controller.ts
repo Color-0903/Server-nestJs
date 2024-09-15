@@ -16,7 +16,7 @@ export class BannerController {
 
   @Get('')
   // @ApiOkResponsePaginated(Banner)
-  @Allow(Permission.Authenticated)
+  // @Allow(Permission.Authenticated)
   async getAll() {
     return BannerRepository.find({ relations: { asset: true }, order: { index: 'ASC' } });
   }

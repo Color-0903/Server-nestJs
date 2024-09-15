@@ -1,11 +1,23 @@
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { Body, Controller, Get, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { LoginDto, LoginResponseDto } from './dtos/login.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags
+} from '@nestjs/swagger';
 import { USER_TYPE } from 'src/common/constants/enum';
+import { UserReq } from 'src/common/decorators/userReq.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { User } from 'src/database/entities/user.entity';
-import { UserReq } from 'src/common/decorators/userReq.decorator';
+import { AuthService } from './auth.service';
+import { LoginDto, LoginResponseDto } from './dtos/login.dto';
 
 @ApiTags('auth-admin')
 @ApiBearerAuth()
@@ -15,9 +27,7 @@ export class AuthAdminController {
 
   @Post('/login')
   @ApiOperation({ summary: 'Login' })
-  public async login(
-    @Body() payload: LoginDto,
-  ): Promise<LoginResponseDto> {
+  public async login(@Body() payload: LoginDto): Promise<LoginResponseDto> {
     payload.type = USER_TYPE.ADMIN;
     return await this.authService.authenticate(payload);
   }
@@ -25,10 +35,10 @@ export class AuthAdminController {
   @Get('/me')
   @ApiOperation({ summary: 'Me' })
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: User })
   public async me(@UserReq() userReq: User): Promise<User> {
-    const user = await this.authService.profile(userReq.id); 
-    if(!user) throw new UnauthorizedException()
+    const user = await this.authService.profile(userReq.id);
+    if (!user) throw new UnauthorizedException();
     return user;
   }
-
 }

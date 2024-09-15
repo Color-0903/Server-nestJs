@@ -2,6 +2,7 @@ import {
   ApiHideProperty,
   ApiProperty,
   ApiPropertyOptional,
+  PartialType,
 } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
@@ -10,7 +11,6 @@ import {
   IsOptional,
   IsString,
   Length,
-  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -79,7 +79,6 @@ export class UpdateUserDto {
   @Type(() => Asset)
   readonly asset?: Asset;
 }
-
 
 export class UpdatePasswordDto {
   @ApiProperty({ name: 'current', type: String })

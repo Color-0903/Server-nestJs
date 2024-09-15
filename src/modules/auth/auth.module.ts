@@ -6,9 +6,11 @@ import { JwtStrategy } from "src/common/guards/jwt.strategy";
 import { PasswordCipher } from "src/common/utils/password-cipher";
 import { UserModule } from "../user/user.module";
 import { AuthAdminController } from "./auth.admin.controller";
+import { OtpModule } from "../otp/otp.module";
 
 @Module({
     imports: [
+      OtpModule,
       UserModule,
       JwtModule.register({
         secret: process.env.JWT_SECRET_KEY,
