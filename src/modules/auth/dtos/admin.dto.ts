@@ -1,26 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
-  IsEnum,
-  IsNotEmpty
+    IsNotEmpty,
+    IsString,
+    Length,
+    MaxLength,
+    MinLength,
 } from 'class-validator';
-import { OTP_TYPE, USER_TYPE } from 'src/common/constants/enum';
 
-export class CreateOtpDto {
+export class CreatePartnerDto {
   @ApiProperty({ name: 'identifier', type: String })
+  @IsString()
   @IsNotEmpty()
   @Transform(({ value }) => String(value.toString().trim()))
   readonly identifier: string;
 
-  @ApiProperty({ name: 'type', enum: OTP_TYPE })
-  @IsEnum(OTP_TYPE)
+  @ApiProperty({ name: 'password', type: String })
+  @IsString()
   @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(16)
   @Transform(({ value }) => String(value.toString().trim()))
-  readonly type: OTP_TYPE;
+  readonly password: string;
 
-  @ApiProperty({ name: 'userType', enum: USER_TYPE, default: USER_TYPE.USER })
-  @IsEnum(USER_TYPE)
+  @ApiProperty({ name: 'code', type: String })
   @IsNotEmpty()
+  @Length(6, 6)
   @Transform(({ value }) => String(value.toString().trim()))
-  readonly userType: USER_TYPE;
+  readonly code: string;
 }

@@ -13,6 +13,8 @@ import {
 import { Asset } from './asset.entity';
 import { Role } from './role.entity';
 import { Order } from './order.entity';
+import { Voucher } from './voucher.entity';
+import { Store } from './store.entity';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -52,7 +54,10 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: true })
   address_detail: string;
-  
+
+  // @Column({ nullable: true, default: 1 })
+  // level: number;
+
   @Column({ nullable: true })
   assetId: boolean;
 
@@ -69,4 +74,14 @@ export class User extends AbstractEntity {
     onDelete: 'CASCADE',
   })
   order: Order;
+
+  @OneToMany(() => Voucher, (p) => p.user, {
+    onDelete: 'CASCADE',
+  })
+  voucher: Voucher[];
+
+  @OneToMany(() => Store, (p) => p.user, {
+    onDelete: 'CASCADE',
+  })
+  store: Store[];
 }

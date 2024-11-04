@@ -47,3 +47,23 @@ export function normalizeString(input: string, spaceReplacer = ' '): string {
     .replace(/[!"£$%^&*()+[\]{};:@#~?\\/,|><`¬'=‘’]/g, '')
     .replace(/\s+/g, spaceReplacer);
 }
+
+
+export function GenerateCode(length?: number) {
+  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@~&?";
+  let code = "";
+  for (let i = 0; i < (length ?? 3); i++) {
+      const randomIndex = Math.floor(Math.random() * letters.length);
+      code += letters[randomIndex];
+  }
+  return code;
+}
+
+export function GenerateNumber(quantity: number) {
+  quantity = quantity ? quantity : 6;
+  let otpCode = '';
+  for (let i = 0; i < quantity; i++) {
+    otpCode += Math.floor(Math.random() * 10);
+  }
+  return otpCode.trim();
+}

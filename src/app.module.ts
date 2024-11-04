@@ -22,6 +22,8 @@ import { UserModule } from './modules/user/user.module';
 import { AssetServerPlugin } from './plugins/asset/asset.module';
 import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strategy';
 import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
+import { VoucherModule } from './modules/voucher/voucher.module';
+import { StoreModule } from './modules/store/store.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
     BannerModule,
     AssetModule,
     CadastralModule,
+    VoucherModule,
+    StoreModule,
     AssetServerPlugin.init({
       route: process.env.S3_FOLDER,
       assetUploadDir: path.join(__dirname, '../static/assets'),

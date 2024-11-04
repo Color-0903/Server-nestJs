@@ -39,7 +39,7 @@ export const ProductRepository = dataSource.getRepository(Product).extend({
     const result = await query.toPaginationResponse({
       size: filter.size,
       page: filter.page,
-      sort: filter.sort,
+      // sort: filter?.sort,
     });
     return result;
   },

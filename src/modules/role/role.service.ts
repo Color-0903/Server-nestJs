@@ -19,6 +19,7 @@ export class RoleService {
   async initRoles() {
     await this.ensureSuperAdminRoleExists();
     await this.ensureAuthRoleExists();
+    await this.ensurePartnerRoleExists();
     await this.ensureRolesHaveValidPermissions();
   }
 
@@ -53,8 +54,8 @@ export class RoleService {
     const role = new Role({
       ...payload,
       permissions: [Permission.Authenticated.name, ...payload.permissions],
-      createdByUserId: userReq.id,
-      lastModifiedByUserId: userReq.id,
+      // createdByUserId: userReq.id,
+      // lastModifiedByUserId: userReq.id,
     });
     return RoleRepository.save(role);
   }
@@ -86,10 +87,11 @@ export class RoleService {
       const invalidPermissions = role.permissions.filter(
         (p) => !assignablePermissions.includes(p),
       );
-      if (invalidPermissions.length) {
+    if (invalidPermissions.length) {
         role.permissions = role.permissions.filter((p) =>
           assignablePermissions.includes(p),
         );
+        console.log(role)
         await RoleRepository.save(role);
       }
     }
@@ -103,6 +105,18 @@ export class RoleService {
       await RoleRepository.insert({
         name: Permission.Authenticated.name,
         permissions: [Permission.Authenticated.name],
+      });
+    }
+  }
+
+  private async ensurePartnerRoleExists() {
+    const role = await RoleRepository.getRoleByName(
+      Permission.Partner.name,
+    );
+    if (!role) {
+      await RoleRepository.insert({
+        name: Permission.Partner.name,
+        permissions: [Permission.Partner.name],
       });
     }
   }

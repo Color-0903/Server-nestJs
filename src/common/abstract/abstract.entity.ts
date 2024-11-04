@@ -22,14 +22,14 @@ export abstract class AbstractEntity {
   @CreateDateColumn()
   createdOnDate: Date;
 
-  @Column({ nullable: true })
-  createdByUserId: string;
+  // @Column({ nullable: true })
+  // createdByUserId: string;
 
   @UpdateDateColumn()
   lastModifiedOnDate: Date;
 
-  @Column({ nullable: true })
-  lastModifiedByUserId: string;
+  // @Column({ nullable: true })
+  // lastModifiedByUserId: string;
 
   @DeleteDateColumn()
   deletedAt: Date;

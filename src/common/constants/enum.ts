@@ -6,8 +6,9 @@ export enum AssetType {
 }
 
 export enum USER_TYPE {
-  USER = 'User',
-  ADMIN = 'Admin',
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  PARTNER = 'PARTNER',
 }
 
 export enum ORDER_STATUS {
@@ -33,4 +34,8 @@ export enum RESPONSE_MESSAGER {
 export enum OTP_TYPE {
   FORGOT = 'FORGOT',
   REGISTER = 'REGISTER',
+}
+
+export enum STORE_TYPE {
+  COFFE = 1,
 }

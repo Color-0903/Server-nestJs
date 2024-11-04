@@ -16,21 +16,23 @@ import { UserRepository } from '../user/user.repository';
 import { FilterOtpDto } from './dtos/filter.dto';
 import { CreateOtpDto } from './dtos/otp.dto';
 import { OtpRepository } from './otp.repository';
+import { GenerateNumber } from 'src/common/utils/function-util';
 
 @Injectable()
 export class OtpService {
   constructor() {}
 
-  public async create(dto: CreateOtpDto) {    const record = await UserRepository.findOneBy({
+  public async create(dto: CreateOtpDto) {
+    const record = await UserRepository.findOneBy({
       identifier: dto?.identifier,
-      type: USER_TYPE.USER,
+      type: dto.userType,
     });
 
     if (dto?.type == OTP_TYPE.REGISTER && record) throw new ConflictException();
 
     if (dto?.type == OTP_TYPE.FORGOT && !record) throw new NotFoundException();
 
-    const otp = this.generateOtpCode(6);
+    const otp = await GenerateNumber(6);
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       host: 'smtp.gmail.com',
@@ -89,10 +91,13 @@ export class OtpService {
 
   public async verify(dto: FilterOtpDto) {
     try {
-      const findOtp = await OtpRepository.findOneBy({
-        identifier: dto?.identifier,
-        // code: dto?.code,
-        used: false,
+      const findOtp = await OtpRepository.findOne({
+        where: {
+          identifier: dto?.identifier,
+          // code: dto?.code,
+          used: false,
+        },
+        order: { createdOnDate: 'DESC' },
       });
 
       if (!findOtp) throw new NotFoundException();
@@ -102,7 +107,7 @@ export class OtpService {
 
       if (isBefore(findOtp.expired, new Date()))
         throw new BadRequestException('OTP_EXPIRED');
-   
+
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
       };
@@ -112,12 +117,5 @@ export class OtpService {
     }
   }
 
-  private generateOtpCode(quantity: number) {
-    quantity = quantity ? quantity : 6;
-    let otpCode = '';
-    for (let i = 0; i < quantity; i++) {
-      otpCode += Math.floor(Math.random() * 10);
-    }
-    return otpCode.trim();
-  }
+ 
 }

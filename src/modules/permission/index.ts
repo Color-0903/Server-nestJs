@@ -8,6 +8,12 @@ export const Permission = {
     assignable: true,
     internal: true,
   }),
+  Partner: new PermissionDefinition({
+    name: 'Partner',
+    description: 'Partner means simply that the Partner is logged in',
+    assignable: true,
+    internal: true,
+  }),
   SuperAdmin: new PermissionDefinition({
     name: 'SuperAdmin',
     description: 'SuperAdmin has unrestricted access to all operations',
@@ -23,6 +29,7 @@ export const Permission = {
   Customer: new CrudPermissionDefinition('Customer'),
   Role: new CrudPermissionDefinition('Role'),
   Administrator: new CrudPermissionDefinition('Administrator'),
+  // Partner: new CrudPermissionDefinition('Partner'),
 };
 
 export function getAllPermissionsMetadata(): PermissionMetadata[] {

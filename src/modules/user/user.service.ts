@@ -1,12 +1,21 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { PasswordCipher } from '../../common/utils/password-cipher';
 import { Permission } from '../permission';
 import { RoleRepository } from '../role/role.repository';
 import { RoleService } from '../role/role.service';
-import { CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './dtos/user.dto';
+import {
+  CreateUserDto,
+  UpdatePasswordDto,
+  UpdateUserDto,
+} from './dtos/user.dto';
 import { FilterUserDto } from './dtos/filter.dto';
 import { UserRepository } from './user.repository';
+import { OtpRepository } from '../otp/otp.repository';
 
 @Injectable()
 export class UserService {
@@ -49,11 +58,18 @@ export class UserService {
       const passwordHash = await this.passwordCipher.hash(payload.password);
       const role = await this.roleService.getRoleByName(roleCode);
 
-      await UserRepository.save({
-        ...payload,
-        passwordHash: passwordHash,
-        roles: [role],
-      });
+      await Promise.all([
+        UserRepository.save({
+          ...payload,
+          passwordHash: passwordHash,
+          roles: [role],
+        }),
+        OtpRepository.update(
+          { identifier: payload.identifier, used: false },
+          {
+            used: true,
+          },
+        )])
 
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
@@ -74,13 +90,19 @@ export class UserService {
     }
   }
 
-  public async changePassword(id: string, dto: UpdatePasswordDto){
-    const user = await UserRepository.findOne({ where: { id }, select: ['passwordHash'] });
-    if(!user) throw new NotFoundException();
+  public async changePassword(id: string, dto: UpdatePasswordDto) {
+    const user = await UserRepository.findOne({
+      where: { id },
+      select: ['passwordHash'],
+    });
+    if (!user) throw new NotFoundException();
 
-    const passMatch = await this.passwordCipher.check(dto.current, user.passwordHash);
+    const passMatch = await this.passwordCipher.check(
+      dto.current,
+      user.passwordHash,
+    );
 
-    if(!passMatch) throw new BadRequestException("CURRENT_PASS_NOT_CORRECT");
+    if (!passMatch) throw new BadRequestException('CURRENT_PASS_NOT_CORRECT');
 
     const passwordHash = await this.passwordCipher.hash(dto.new);
     await UserRepository.update(id, { passwordHash });
