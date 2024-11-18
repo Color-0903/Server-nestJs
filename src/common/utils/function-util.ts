@@ -67,3 +67,8 @@ export function GenerateNumber(quantity: number) {
   }
   return otpCode.trim();
 }
+
+
+export function GenerateUrlCode(code: string){
+  return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${code}`
+}

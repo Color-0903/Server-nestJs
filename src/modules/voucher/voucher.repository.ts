@@ -20,6 +20,14 @@ export const VoucherRepository = dataSource.getRepository(Voucher).extend({
       });
     }
 
+    if(filter?.userId) {
+      query.where('voucher.userId = :userId', { userId: filter.userId });
+    }
+
+    if(filter?.storeId) {
+      query.where('voucher.storeId = :storeId', { storeId: filter.storeId });
+    }
+
     const result = await query.toPaginationResponse({
       size: filter.size,
       page: filter.page,

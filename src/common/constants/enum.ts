@@ -37,5 +37,12 @@ export enum OTP_TYPE {
 }
 
 export enum STORE_TYPE {
-  COFFE = 1,
+  COFFE = 'COFFE',
+}
+
+export enum STORE_STATUS {
+  PENDING = 'PENDING',
+  ACCEPT = 'ACCEPT',
+  BLOCK = 'BLOCK',
+  CLOSE = 'CLOSE',
 }

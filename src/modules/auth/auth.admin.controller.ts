@@ -18,6 +18,8 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { User } from 'src/database/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LoginDto, LoginResponseDto } from './dtos/login.dto';
+import { Allow } from './guards/allow.decorator';
+import { Permission } from '../permission';
 
 @ApiTags('auth-admin')
 @ApiBearerAuth()
@@ -36,6 +38,7 @@ export class AuthAdminController {
   @ApiOperation({ summary: 'Me' })
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: User })
+  @Allow(Permission.Administrator)
   public async me(@UserReq() userReq: User): Promise<User> {
     const user = await this.authService.profile(userReq.id);
     if (!user) throw new UnauthorizedException();

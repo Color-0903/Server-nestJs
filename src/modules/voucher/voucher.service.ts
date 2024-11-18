@@ -13,7 +13,8 @@ import {
 } from './dtos/voucher';
 import { VoucherRepository } from './voucher.repository';
 import { StoreRepository } from '../store/store.repository';
-import { GenerateCode, GenerateNumber } from 'src/common/utils/function-util';
+import { GenerateCode, GenerateNumber, GenerateUrlCode } from 'src/common/utils/function-util';
+// import { GenerateQrCode } from 'src/common/services/qrCode';
 
 @Injectable()
 export class VoucherService {
@@ -27,6 +28,7 @@ export class VoucherService {
     try {
 
       const code = await `${GenerateNumber(4)}-${GenerateCode(4)}`;
+      const qrCode = GenerateUrlCode(code);
       
       const [store, voucher] = await Promise.all([
         StoreRepository.findOne({ where: { userId, id: dto.storeId } }),
@@ -36,7 +38,7 @@ export class VoucherService {
 
       if(voucher) throw new ConflictException();
 
-      return await VoucherRepository.save({...dto, userId, code});
+      return await VoucherRepository.save({...dto, userId, code, qrCode });
     } catch (error) {
       throw new BadRequestException(error);
     }

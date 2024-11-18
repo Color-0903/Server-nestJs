@@ -62,7 +62,7 @@ export class Product extends AbstractEntity {
   })
   colors: Color[];
 
-  @ManyToMany(() => Asset, (p) => p.products, {
+  @ManyToMany(() => Asset, {
     onDelete: 'CASCADE',
   })
   @JoinTable({ name: 'product_asset' })

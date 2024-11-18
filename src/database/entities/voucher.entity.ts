@@ -29,6 +29,12 @@ export class Voucher extends AbstractEntity {
   description: string;
 
   @Column({ nullable: true, default: null })
+  releaseAt: Date;
+
+  @Column({ nullable: true, default: null })
+  qrCode: string;
+
+  @Column({ nullable: true, default: null })
   expired: Date;
 
   @Column({ default: true })

@@ -7,6 +7,9 @@ export const StoreRepository = dataSource.getRepository(Store).extend({
   async getAll(filter: FilterStoreDto) {
     const query = StoreRepository.createQueryBuilder('store');
 
+    query.leftJoinAndSelect('store.asset', 'asset')
+    query.leftJoinAndSelect('store.assets', 'assets')
+    
     if (filter.fullTextSearch) {
       const listFullTextSearch = filter.fullTextSearch.split(/　| /);
       listFullTextSearch.forEach((text, index) => {
@@ -18,6 +21,10 @@ export const StoreRepository = dataSource.getRepository(Store).extend({
           ),
         );
       });
+    }
+
+    if (filter?.userId) {
+      query.where('store.userId = :userId', { userId: filter?.userId });
     }
 
     const result = await query.toPaginationResponse({

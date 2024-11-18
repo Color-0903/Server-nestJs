@@ -19,19 +19,23 @@ export class CadastralController {
   }
 
   @Get('districts')
-  async getDistrict(@Query('cityCode') cityCode: string) {
+  async getDistrict(@Query('provinceId') provinceId: string) {
+    const province = await CadastralRepository.findOneBy({ id: provinceId });
     return await CadastralRepository.find({
       where: {
-        cityCode: cityCode,
+        cityCode: province?.baseCode,
+        type: 'district'
       },
     });
   }
 
   @Get('wards')
-  async getWard(@Query('districtCode') districtCode: string) {
+  async getWard(@Query('districtId') districtId: string) {
+    const district = await CadastralRepository.findOneBy({ id: districtId });
     return await CadastralRepository.find({
       where: {
-        districtCode: districtCode,
+        districtCode: district?.baseCode,
+        type: 'ward'
       },
     });
   }

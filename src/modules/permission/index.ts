@@ -36,3 +36,4 @@ export function getAllPermissionsMetadata(): PermissionMetadata[] {
   const allPermissions = flatten(Object.keys(Permission).map((key) => [Permission[key]]));
   return allPermissions.reduce((all, def) => [...all, ...def.getMetadata()], [] as PermissionMetadata[]);
 }
+

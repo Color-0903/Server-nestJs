@@ -116,7 +116,7 @@ export class RoleService {
     if (!role) {
       await RoleRepository.insert({
         name: Permission.Partner.name,
-        permissions: [Permission.Partner.name],
+        permissions: [Permission.Partner.name, Permission.Authenticated.name],
       });
     }
   }

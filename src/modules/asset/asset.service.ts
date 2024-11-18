@@ -180,4 +180,18 @@ export class AssetService {
       throw new BadRequestException(error);
     }
   }
+
+  public async revemoveFile(id: string, s3Identifier: string) {
+    const { assetOptions } = this.configService;
+    const { assetStorageStrategy } = assetOptions;
+
+    try {
+      await Promise.all([
+        AssetRepository.delete(id),
+        assetStorageStrategy.deleteFile(s3Identifier),
+      ])
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }

@@ -30,13 +30,13 @@ export class VoucherController {
 
   @Get('/find')
   @ApiOkResponsePaginated(Voucher)
-  // @Allow(Permission.Authenticated)
+  @Allow(Permission.Authenticated)
   async getAll(@Query() filter: FilterVoucherDto) {
     return this.voucherService.getAll(filter);
   }
 
   @Get('/detail:id')
-  // @Allow(Permission.Authenticated)
+  @Allow(Permission.Authenticated)
   async getById(@Param('id') id: string) {
     return VoucherRepository.findOneBy({ id });
   }

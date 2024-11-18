@@ -29,6 +29,6 @@ export class Asset extends AbstractEntity {
 
   @Column({ nullable: true }) source: string;
 
-  @ManyToMany(() => Product, (p) => p.assets)
-  products: Product[];
+  // @ManyToMany(() => Product, (p) => p.assets)
+  // products: Product[];
 }

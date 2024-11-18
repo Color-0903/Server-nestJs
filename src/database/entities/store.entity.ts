@@ -6,15 +6,18 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Cadastral } from './cadastral.entity';
 import { Voucher } from './voucher.entity';
-import { STORE_TYPE } from 'src/common/constants/enum';
+import { STORE_STATUS, STORE_TYPE } from 'src/common/constants/enum';
 import { OpenTime } from 'src/modules/store/dtos/store';
-
+import { Asset } from './asset.entity';
 
 @Entity('store')
 export class Store extends AbstractEntity {
@@ -39,7 +42,7 @@ export class Store extends AbstractEntity {
   @Column({ nullable: true, default: 0 })
   evaluate: number;
 
-  @Column( { nullable: true, type: 'json' } )
+  @Column({ nullable: true, type: 'json' })
   openTime: OpenTime;
 
   @Column({ nullable: true })
@@ -54,13 +57,19 @@ export class Store extends AbstractEntity {
   @Column({ nullable: true, type: 'text' })
   detail: string;
 
+  @Column({ nullable: true, enum: STORE_STATUS, default: STORE_STATUS.PENDING, type: 'enum' })
+  status: STORE_STATUS;
+
   @Column({ nullable: false })
   userId: string;
+
+  @Column({ nullable: true })
+  assetId: string;
 
   @ManyToOne(() => User, (p) => p.store)
   @JoinColumn({ name: 'userId' })
   user: User;
-  
+
   @ManyToOne(() => Cadastral)
   @JoinColumn({ name: 'provinceId' })
   province: Cadastral;
@@ -77,4 +86,16 @@ export class Store extends AbstractEntity {
     onDelete: 'CASCADE',
   })
   voucher: Voucher[];
+
+  @OneToOne(() => Asset, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'assetId' })
+  asset: Asset;
+
+  @ManyToMany(() => Asset, {
+    onDelete: 'CASCADE',
+  })
+  @JoinTable({ name: 'store_asset' })
+  assets: Asset[];
 }

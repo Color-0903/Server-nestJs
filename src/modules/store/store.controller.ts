@@ -35,9 +35,9 @@ export class StoreController {
     return this.storeService.getAll(filter);
   }
 
-  @Get('/detail:id')
+  @Get('/detail/:id')
   async getById(@Param('id') id: string) {
-    return StoreRepository.findOneBy({ id });
+    return StoreRepository.findOne({ where: { id }, relations: ['asset', 'assets'] }, );
   }
 
   @Post('/create')
