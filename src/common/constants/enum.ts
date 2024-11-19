@@ -46,3 +46,9 @@ export enum STORE_STATUS {
   BLOCK = 'BLOCK',
   CLOSE = 'CLOSE',
 }
+
+export enum NOTIFY_TYPE {
+  SUPPORT = 'SUPPORT',
+  NOTIFY = 'NOTIFY',
+}
+

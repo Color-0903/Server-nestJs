@@ -35,7 +35,7 @@ export class VoucherController {
     return this.voucherService.getAll(filter);
   }
 
-  @Get('/detail:id')
+  @Get('/detail/:id')
   @Allow(Permission.Authenticated)
   async getById(@Param('id') id: string) {
     return VoucherRepository.findOneBy({ id });

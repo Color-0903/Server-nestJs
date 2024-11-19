@@ -24,6 +24,7 @@ import { configureS3AssetStorage } from './plugins/asset/s3-asset-storage-strate
 import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
 import { VoucherModule } from './modules/voucher/voucher.module';
 import { StoreModule } from './modules/store/store.module';
+import { NotifyModule } from './modules/notify/notify.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { StoreModule } from './modules/store/store.module';
     CadastralModule,
     VoucherModule,
     StoreModule,
+    NotifyModule,
     AssetServerPlugin.init({
       route: process.env.S3_FOLDER,
       assetUploadDir: path.join(__dirname, '../static/assets'),
