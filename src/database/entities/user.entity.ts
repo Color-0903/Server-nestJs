@@ -5,6 +5,7 @@ import {
   DeepPartial,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -75,10 +76,9 @@ export class User extends AbstractEntity {
   })
   order: Order;
 
-  @OneToMany(() => Voucher, (p) => p.user, {
-    onDelete: 'CASCADE',
-  })
-  voucher: Voucher[];
+  @ManyToMany(() => Voucher)
+  @JoinTable({ name: 'user_voucher' })
+  vouchers: Voucher[]
 
   @OneToMany(() => Store, (p) => p.user, {
     onDelete: 'CASCADE',

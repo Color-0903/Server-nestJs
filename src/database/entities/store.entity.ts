@@ -75,11 +75,11 @@ export class Store extends AbstractEntity {
   province: Cadastral;
 
   @ManyToOne(() => Cadastral)
-  @JoinColumn({ name: 'provinceId' })
+  @JoinColumn({ name: 'districtId' })
   district: Cadastral;
 
   @ManyToOne(() => Cadastral)
-  @JoinColumn({ name: 'provinceId' })
+  @JoinColumn({ name: 'wardId' })
   ward: Cadastral;
 
   @OneToMany(() => Voucher, (p) => p.store, {

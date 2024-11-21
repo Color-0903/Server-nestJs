@@ -41,6 +41,12 @@ export class VoucherController {
     return VoucherRepository.findOneBy({ id });
   }
 
+  @Get('/activate/:code')
+  @Allow(Permission.Partner)
+  async activate(@Param('code') code: string, @UserReq() userReq: User) {
+    return this.voucherService.active(code, userReq.id);
+  }
+
   @Post('/create')
   @UseGuards(JwtAuthGuard)
   @Allow(Permission.Partner)

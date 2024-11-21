@@ -52,13 +52,16 @@ export class Voucher extends AbstractEntity {
   @Column({ nullable: true, default: 99 })
   quantity: number;
 
+  @Column({ nullable: true, default: 0 })
+  used: number;
+
   @Column({ nullable: true })
   userId: string;
 
   @Column({ nullable: false })
   storeId: string;
 
-  @ManyToOne(() => User, (p) => p.voucher)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
 
