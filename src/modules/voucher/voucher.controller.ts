@@ -15,7 +15,7 @@ import { Voucher } from 'src/database/entities/voucher.entity';
 import { Allow } from '../auth/guards/allow.decorator';
 import { Permission } from '../permission';
 import { FilterVoucherDto } from './dtos/filter.dto';
-import { CreateVoucherDto, UpdateVoucherDto } from './dtos/voucher';
+import { ActivateVoucherDto, CreateVoucherDto, UpdateVoucherDto } from './dtos/voucher';
 import { VoucherRepository } from './voucher.repository';
 import { VoucherService } from './voucher.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
@@ -41,10 +41,10 @@ export class VoucherController {
     return VoucherRepository.findOneBy({ id });
   }
 
-  @Get('/activate/:code')
+  @Post('/activate')
   @Allow(Permission.Partner)
-  async activate(@Param('code') code: string, @UserReq() userReq: User) {
-    return this.voucherService.active(code, userReq.id);
+  async activate(@Body() dto: ActivateVoucherDto, @UserReq() userReq: User) {
+    return this.voucherService.active(dto.code, userReq.id);
   }
 
   @Post('/create')

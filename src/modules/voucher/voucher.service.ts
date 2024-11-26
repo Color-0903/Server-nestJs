@@ -14,7 +14,7 @@ import {
 import { VoucherRepository } from './voucher.repository';
 import { StoreRepository } from '../store/store.repository';
 import { GenerateCode, GenerateNumber, GenerateUrlCode } from 'src/common/utils/function-util';
-import moment from 'moment';
+import * as moment from 'moment';
 // import { GenerateQrCode } from 'src/common/services/qrCode';
 
 @Injectable()
@@ -46,23 +46,25 @@ export class VoucherService {
   }
 
   public async active(code: string, userId: string) {
+    const findVoucher = await VoucherRepository.findOne({ where: { code } });
+    if(!findVoucher) throw new NotFoundException();
+    if(findVoucher?.userId != userId) throw new UnauthorizedException();
+    
+    if(findVoucher?.quantity < 1) throw new BadRequestException("VOUCHER_LIMITED");
+
+    if(findVoucher?.quantity < 1) throw new BadRequestException("VOUCHER_LIMITED"); 
+
+    if(findVoucher.expired && moment().isAfter(moment(findVoucher.expired))) throw new BadRequestException("VOUCHER_EXPIRED");
+
+    if(findVoucher.releaseAt && moment().isBefore(moment(findVoucher.releaseAt))) throw new BadRequestException("VOUCHER_NOT_USE_YET");
     try {
-      const findVoucher = await VoucherRepository.findOne({ where: { code } });
-      if(!findVoucher) throw new NotFoundException();
-      if(findVoucher?.userId != userId) throw new UnauthorizedException();
-      
-      if(findVoucher?.quantity < 1) throw new BadRequestException("VOUCHER_LIMITED");
-
-      if(findVoucher?.quantity < 1) throw new BadRequestException("VOUCHER_LIMITED"); 
-
-      if(findVoucher.expired && moment().isAfter(moment(findVoucher.expired))) throw new BadRequestException("VOUCHER_EXPIRED");
-
-      if(findVoucher.releaseAt && moment().isBefore(moment(findVoucher.releaseAt))) throw new BadRequestException("VOUCHER_NOT_USE_YET");
-
       await Promise.all([
         VoucherRepository.update(findVoucher.id, { quantity: +(+findVoucher?.quantity - 1), used: +(+findVoucher.used + 1) })
       ])
 
+      return {
+        result: RESPONSE_MESSAGER.SUCCESS,
+      }; 
     } catch (error) {
       throw new BadRequestException(error);
     }
