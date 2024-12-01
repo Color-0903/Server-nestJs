@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 import { AssetStorageStrategy } from '../config/asset-storage-strategy/asset-storage-strategy';
 import { getAssetUrlPrefixFn } from './common';
 import * as AWS from 'aws-sdk';
+import * as sharp from 'sharp';
 
 export type S3Credentials = {
   accessKeyId: string;
@@ -179,12 +180,19 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
   destroy?: (() => void | Promise<void>) | undefined;
 
   async writeFileFromBuffer(fileName: string, data: Buffer, mimetype: string): Promise<string> {
+    const optimizedImage = await sharp(data)
+    .resize(1024, null, {
+      fit: 'inside',
+    })
+    .jpeg({ quality: 90 })
+    .toBuffer();
+
     const result = await this.s3
       .upload(
         {
           Bucket: this.s3Config.bucket,
           Key: fileName,
-          Body: data,
+          Body: optimizedImage,
           ContentType: mimetype,
         },
         this.s3Config.nativeS3UploadConfiguration,

@@ -5,24 +5,26 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import * as moment from 'moment';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
+import {
+  GenerateCode,
+  GenerateNumber,
+  GenerateUrlCode,
+} from 'src/common/utils/function-util';
+import dataSource from 'src/database/data-source';
+import { In } from 'typeorm';
+import { StoreRepository } from '../store/store.repository';
 import { FilterUserVoucher, FilterVoucherDto } from './dtos/filter.dto';
 import {
   CreateVoucherDto,
   RecallVoucherDto,
   UpdateVoucherDto,
 } from './dtos/voucher';
-import { VoucherRepository } from './voucher.repository';
-import { StoreRepository } from '../store/store.repository';
 import {
-  GenerateCode,
-  GenerateNumber,
-  GenerateUrlCode,
-} from 'src/common/utils/function-util';
-import * as moment from 'moment';
-import { UserRepository } from '../user/user.repository';
-import dataSource from 'src/database/data-source';
-import { In } from 'typeorm';
+  VoucherHistoryRepository,
+  VoucherRepository,
+} from './voucher.repository';
 // import { GenerateQrCode } from 'src/common/services/qrCode';
 
 @Injectable()
@@ -139,6 +141,7 @@ export class VoucherService {
           quantity: +(+findVoucher?.quantity - 1),
           used: +(+findVoucher.used + 1),
         }),
+        VoucherHistoryRepository.save({ voucherId: findVoucher.id }),
       ]);
 
       return {
@@ -159,6 +162,14 @@ export class VoucherService {
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
       };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  public async histories(filter: FilterUserVoucher, userId: string) {
+    try {
+      return VoucherHistoryRepository.getAll(filter, userId);
     } catch (error) {
       throw new BadRequestException(error);
     }

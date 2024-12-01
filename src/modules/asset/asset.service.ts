@@ -37,14 +37,14 @@ export class AssetService {
       const oldName = filename;
       filename = `${prefix}.${suffixes}`;
 
-      const stream = Readable.from(buffer);
-      stream.on('error', (err: any) => {
-        reject(err);
-      });
+      // const stream = Readable.from(buffer);
+      // stream.on('error', (err: any) => {
+      //   reject(err);
+      // });
       let result: any;
       try {
         result = await this.createAssetInternal(
-          stream,
+          buffer,
           filename,
           mimetype,
           oldName,
@@ -58,7 +58,7 @@ export class AssetService {
   }
 
   private async createAssetInternal(
-    stream: Stream,
+    buffer: Buffer,
     fileName: string,
     mimetype: string,
     oldName: string,
@@ -69,9 +69,9 @@ export class AssetService {
     }
     const { assetStorageStrategy } = assetOptions;
     let sourceFileName = await this.getSourceFileName(fileName);
-    const sourceFileIdentifier = await assetStorageStrategy.writeFileFromStream(
+    const sourceFileIdentifier = await assetStorageStrategy.writeFileFromBuffer(
       sourceFileName,
-      stream,
+      buffer,
       mimetype,
     );
     const sourceFile =

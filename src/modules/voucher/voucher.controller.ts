@@ -23,6 +23,7 @@ import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { UserReq } from 'src/common/decorators/userReq.decorator';
 import { User } from 'src/database/entities/user.entity';
 import { RemoveFieldResponse } from 'src/common/utils/remove-field-response';
+import { VoucherHistory } from 'src/database/entities/voucher-history.entity';
 
 @ApiTags('voucher')
 @Controller('voucher')
@@ -58,6 +59,13 @@ export class VoucherController {
   @Allow(Permission.Authenticated)
   async getById(@Param('id') id: string) {
     return VoucherRepository.findOneBy({ id });
+  }
+
+  @Get('/histories')
+  @Allow(Permission.Partner)
+  @ApiOkResponsePaginated(VoucherHistory)
+  async histories(@Query() filter: FilterUserVoucher, @UserReq() userReq: User) {
+    return this.voucherService.histories(filter, userReq.id);
   }
   
   @Post('/activate')
