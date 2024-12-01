@@ -15,3 +15,11 @@ export class ActivateVoucherDto {
     code: string;
 }
 
+
+export class RecallVoucherDto {
+    @ApiProperty({ name: 'userId', type: String })
+    @IsNotEmpty()
+    @Transform(({ value }) => value?.toString())
+    userId: string;
+}
+

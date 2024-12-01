@@ -116,6 +116,11 @@ export class UserService {
     return await UserRepository.getAll(filter);
   }
 
+  public async getVoucher(filter: FilterUserDto, userId: string) {
+    return await UserRepository.getVoucher(filter, userId);
+  }
+
+
   public async delete(id: string) {
     return UserRepository.softDelete(id);
   }

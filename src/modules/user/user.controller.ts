@@ -23,10 +23,17 @@ export class UserController {
     return await this.userService.getAll(filter);
   }
 
+  @Get('voucher')
+  @ApiOkResponsePaginated(User)
+  @Allow(Permission.Authenticated)
+  async getUserVoucher(@Query() filter: FilterUserDto, @UserReq() userReq: User) {
+    return await this.userService.getVoucher(filter, userReq.id);
+  }
+
   @Post('edit-me')
   @UseGuards(JwtAuthGuard)
   @Allow(Permission.Authenticated)
-  async edit(@Body() dto: UpdateUserDto,  @UserReq() userReq: User) {
+  async edit(@Body() dto: UpdateUserDto, @UserReq() userReq: User) {
     return this.userService.update(userReq.id, dto);
   }
 

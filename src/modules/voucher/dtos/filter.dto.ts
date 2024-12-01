@@ -14,3 +14,5 @@ export class FilterVoucherDto extends SearchFilter {
   @Transform(({ value }) => value?.toString())
   storeId: string;
 }
+
+export class FilterUserVoucher extends SearchFilter { }

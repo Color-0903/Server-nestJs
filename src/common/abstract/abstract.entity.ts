@@ -31,6 +31,6 @@ export abstract class AbstractEntity {
   // @Column({ nullable: true })
   // lastModifiedByUserId: string;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ select: false })
   deletedAt: Date;
 }

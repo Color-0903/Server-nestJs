@@ -19,13 +19,13 @@ export class Asset extends AbstractEntity {
 
   @Column('varchar') type: string;
 
-  @Column({ nullable: true }) mimeType: string;
+  @Column({ nullable: true, select: false }) mimeType: string;
 
-  @Column({ default: 0 }) width: number;
+  @Column({ default: 0, select: false }) width: number;
 
-  @Column({ default: 0 }) height: number;
+  @Column({ default: 0, select: false }) height: number;
 
-  @Column({ nullable: true }) fileSize: number;
+  @Column({ nullable: true, select: false }) fileSize: number;
 
   @Column({ nullable: true }) source: string;
 
