@@ -25,6 +25,7 @@ import { S3NamingStrategy } from './plugins/asset/s3-naming-strategy';
 import { VoucherModule } from './modules/voucher/voucher.module';
 import { StoreModule } from './modules/store/store.module';
 import { NotifyModule } from './modules/notify/notify.module';
+import { StatisticalModule } from './modules/statistical/statistical.module';
 
 @Module({
   imports: [
@@ -58,7 +59,7 @@ import { NotifyModule } from './modules/notify/notify.module';
         },
       }),
     }),
-
+    StatisticalModule,
     InitializerModule,
     PermissionModule,
   ],
