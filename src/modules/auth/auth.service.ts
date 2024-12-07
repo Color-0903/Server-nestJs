@@ -116,4 +116,15 @@ export class AuthService {
       throw new BadRequestException(error);
     }
   }
+
+  public async googleAuth(user: User) {
+    try {
+      const token = await this.encode(user);
+      return {
+        token,
+      };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }

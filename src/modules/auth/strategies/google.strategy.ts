@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { AUTH_METHOD_TYPE } from 'src/common/constants/enum';
+import { AUTH_METHOD_TYPE, USER_TYPE } from 'src/common/constants/enum';
 import { UserRepository } from 'src/modules/user/user.repository';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: VerifyCallback,
   ): Promise<any> {
     const { name, emails, photos } = profile;
-    const userType = req.query.state;
+    const userType = (req.query.state ?? USER_TYPE.USER).toUpperCase();
     const user = {
       email: emails[0].value,
       firstName: name.givenName,
@@ -34,12 +34,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       refreshToken,
     };
     let googleUser = await UserRepository.findOne({
-      where: { identifier: user?.email },
+      where: { identifier: user?.email, type: userType?.toString() },
     });
     if (!googleUser) {
       googleUser = await UserRepository.save({
         identifier: user?.email,
-        displayName: `${user?.firstName ?? ''} ${user?.lastName ?? ''} `,
+        displayName: `${user?.firstName ?? ''} ${user?.lastName ?? ''} `.trim(),
         authMethod: AUTH_METHOD_TYPE.GOOGLE,
         verified: true,
         isActive: true,
