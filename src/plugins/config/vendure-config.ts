@@ -165,10 +165,10 @@ type DeepPartialSimple<T> = {
     | (T[P] extends Array<infer U>
         ? Array<DeepPartialSimple<U>>
         : T[P] extends ReadonlyArray<infer X>
-          ? ReadonlyArray<DeepPartialSimple<X>>
-          : T[P] extends Type<any>
-            ? T[P]
-            : DeepPartialSimple<T[P]>);
+        ? ReadonlyArray<DeepPartialSimple<X>>
+        : T[P] extends Type<any>
+        ? T[P]
+        : DeepPartialSimple<T[P]>);
 };
 
 export type PartialVendureConfig = DeepPartialSimple<VendureConfig>;

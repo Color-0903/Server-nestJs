@@ -16,7 +16,7 @@ export class FilterVoucherDto extends SearchFilter {
   storeId: string;
 }
 
-export class FilterUserVoucher extends SearchFilter { 
+export class FilterUserVoucher extends SearchFilter {
   @ApiPropertyOptional({ name: 'storeId', type: String })
   @IsOptional()
   @Transform(({ value }) => value?.toString())

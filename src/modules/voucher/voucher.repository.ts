@@ -42,18 +42,14 @@ export const VoucherRepository = dataSource.getRepository(Voucher).extend({
   },
 
   async userVoucher(filter: FilterUserVoucher, userId: string) {
-    const voucherIds = (
-      await VoucherRepository.find({ where: { userId }, select: ['id'] })
-    )?.map((item) => item.id);
+    const voucherIds = (await VoucherRepository.find({ where: { userId }, select: ['id'] }))?.map(
+      (item) => item.id,
+    );
     const query = UserRepository.createQueryBuilder('user')
       .leftJoinAndSelect('user.asset', 'asset')
-      .leftJoinAndMapMany(
-        'user.vouchers',
-        Voucher,
-        'voucher',
-        'voucher.id IN (:...voucherIds)',
-        { voucherIds },
-      )
+      .leftJoinAndMapMany('user.vouchers', Voucher, 'voucher', 'voucher.id IN (:...voucherIds)', {
+        voucherIds,
+      })
       .andWhere(
         'EXISTS (SELECT * from user_voucher uv where uv.voucherId IN (:...voucherIds) AND uv.usersId = user.id)',
         { voucherIds },
@@ -83,11 +79,15 @@ export const VoucherRepository = dataSource.getRepository(Voucher).extend({
     return result;
   },
 });
-export const VoucherHistoryRepository = dataSource.getRepository(VoucherHistory).extend({ 
+export const VoucherHistoryRepository = dataSource.getRepository(VoucherHistory).extend({
   async getAll(filter: FilterUserVoucher, userId: string) {
-  console.log('run vod ay')
-  const query = VoucherHistoryRepository.createQueryBuilder('history')
-    .leftJoinAndSelect('history.voucher', 'voucher', 'voucher.userId = :userId' , { userId })
+    console.log('run vod ay');
+    const query = VoucherHistoryRepository.createQueryBuilder('history').leftJoinAndSelect(
+      'history.voucher',
+      'voucher',
+      'voucher.userId = :userId',
+      { userId },
+    );
 
     if (filter.fullTextSearch) {
       const listFullTextSearch = filter.fullTextSearch.split(/　| /);
@@ -110,12 +110,12 @@ export const VoucherHistoryRepository = dataSource.getRepository(VoucherHistory)
       query.andWhere('voucher.storeId = :storeId', { storeId: filter.storeId });
     }
 
-    if(filter?.from){
-      query.andWhere('history.createdOnDate >= :from', { from: filter?.from })
+    if (filter?.from) {
+      query.andWhere('history.createdOnDate >= :from', { from: filter?.from });
     }
 
-    if(filter?.to){
-      query.andWhere('history.createdOnDate <= :to', { to: filter?.to })
+    if (filter?.to) {
+      query.andWhere('history.createdOnDate <= :to', { to: filter?.to });
     }
 
     const result = await query.toPaginationResponse({
@@ -124,5 +124,4 @@ export const VoucherHistoryRepository = dataSource.getRepository(VoucherHistory)
     });
     return result;
   },
-
-})
+});

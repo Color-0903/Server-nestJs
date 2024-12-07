@@ -18,7 +18,9 @@ export function getAssetUrlPrefixFn(options: AssetServerOptions) {
       return assetUrlPrefix(identifier);
     };
   }
-  throw new Error(`The assetUrlPrefix option was of an unexpected type: ${JSON.stringify(assetUrlPrefix)}`);
+  throw new Error(
+    `The assetUrlPrefix option was of an unexpected type: ${JSON.stringify(assetUrlPrefix)}`,
+  );
 }
 
 export function getValidFormat(format?: unknown): ImageTransformFormat | undefined {

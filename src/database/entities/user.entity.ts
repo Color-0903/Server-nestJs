@@ -9,13 +9,12 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne
 } from 'typeorm';
 import { Asset } from './asset.entity';
-import { Role } from './role.entity';
 import { Order } from './order.entity';
-import { Voucher } from './voucher.entity';
+import { Role } from './role.entity';
 import { Store } from './store.entity';
+import { Voucher } from './voucher.entity';
 
 @Entity('users')
 export class User extends AbstractEntity {
@@ -25,7 +24,7 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: false })
   identifier: string;
-  
+
   @Column({ default: false })
   type: USER_TYPE;
 
@@ -43,18 +42,20 @@ export class User extends AbstractEntity {
 
   @Column({ nullable: true })
   displayName: string;
-  
+
   @Column({ nullable: true })
   dob: Date;
-  
+
   @Column({ nullable: true })
   phone: string;
 
   @Column({ nullable: true })
-  address: string;
+  authMethod: string;
+  // @Column({ nullable: true })
+  // address: string;
 
-  @Column({ nullable: true })
-  address_detail: string;
+  // @Column({ nullable: true })
+  // address_detail: string;
 
   // @Column({ nullable: true, default: 1 })
   // level: number;
@@ -78,7 +79,7 @@ export class User extends AbstractEntity {
 
   @ManyToMany(() => Voucher)
   @JoinTable({ name: 'user_voucher' })
-  vouchers: Voucher[]
+  vouchers: Voucher[];
 
   @OneToMany(() => Store, (p) => p.user, {
     onDelete: 'CASCADE',

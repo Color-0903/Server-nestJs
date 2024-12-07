@@ -5,5 +5,5 @@ import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 export class FilterOrderDto extends SearchFilter {
   @ApiPropertyOptional({ type: Array(String) || String, name: 'status' })
   @IsOptional()
-  readonly status?: String[] | String;
+  readonly status?: string[] | string;
 }

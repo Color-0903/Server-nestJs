@@ -1,6 +1,6 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsString, Length, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { USER_TYPE } from 'src/common/constants/enum';
 
 export class LoginDto {
@@ -21,6 +21,6 @@ export class LoginDto {
   type: USER_TYPE;
 }
 
-export class LoginResponseDto{
-    token: string;
+export class LoginResponseDto {
+  token: string;
 }

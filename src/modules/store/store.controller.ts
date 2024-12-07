@@ -37,14 +37,14 @@ export class StoreController {
 
   @Get('/detail/:id')
   async getById(@Param('id') id: string) {
-    return StoreRepository.findOne({ where: { id }, relations: ['asset', 'assets'] }, );
+    return StoreRepository.findOne({ where: { id }, relations: ['asset', 'assets'] });
   }
 
   @Post('/create')
   @UseGuards(JwtAuthGuard)
   @Allow(Permission.Partner)
   async create(@Body() dto: CreateStoreDto, @UserReq() userReq: User) {
-    console.log(dto)
+    console.log(dto);
     return this.storeService.create(dto, userReq.id);
   }
 
@@ -58,7 +58,7 @@ export class StoreController {
   @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
   @Allow(Permission.Partner)
-  async delete(@Param('id') id: string , @UserReq() userReq: User) {
+  async delete(@Param('id') id: string, @UserReq() userReq: User) {
     return this.storeService.delete(id, userReq.id);
   }
 }

@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { DELETE_TYPE } from 'src/common/constants/enum';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 import { Role } from '../../database/entities/role.entity';
@@ -48,8 +43,7 @@ export class RoleService {
         // },
       ],
     });
-    if (checkRole)
-      throw new HttpException('ROLE_NAME_IS_EXIST', HttpStatus.BAD_REQUEST);
+    if (checkRole) throw new HttpException('ROLE_NAME_IS_EXIST', HttpStatus.BAD_REQUEST);
 
     const role = new Role({
       ...payload,
@@ -84,23 +78,17 @@ export class RoleService {
     const roles = await RoleRepository.find();
     const assignablePermissions = this.getAllAssignablePermissions();
     for (const role of roles) {
-      const invalidPermissions = role.permissions.filter(
-        (p) => !assignablePermissions.includes(p),
-      );
-    if (invalidPermissions.length) {
-        role.permissions = role.permissions.filter((p) =>
-          assignablePermissions.includes(p),
-        );
-        console.log(role)
+      const invalidPermissions = role.permissions.filter((p) => !assignablePermissions.includes(p));
+      if (invalidPermissions.length) {
+        role.permissions = role.permissions.filter((p) => assignablePermissions.includes(p));
+        console.log(role);
         await RoleRepository.save(role);
       }
     }
   }
 
   private async ensureAuthRoleExists() {
-    const AuthRole = await RoleRepository.getRoleByName(
-      Permission.Authenticated.name,
-    );
+    const AuthRole = await RoleRepository.getRoleByName(Permission.Authenticated.name);
     if (!AuthRole) {
       await RoleRepository.insert({
         name: Permission.Authenticated.name,
@@ -110,9 +98,7 @@ export class RoleService {
   }
 
   private async ensurePartnerRoleExists() {
-    const role = await RoleRepository.getRoleByName(
-      Permission.Partner.name,
-    );
+    const role = await RoleRepository.getRoleByName(Permission.Partner.name);
     if (!role) {
       await RoleRepository.insert({
         name: Permission.Partner.name,

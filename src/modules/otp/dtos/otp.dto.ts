@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-  IsEnum,
-  IsNotEmpty
-} from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { OTP_TYPE, USER_TYPE } from 'src/common/constants/enum';
 
 export class CreateOtpDto {

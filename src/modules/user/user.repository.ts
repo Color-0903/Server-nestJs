@@ -35,19 +35,19 @@ export const UserRepository = dataSource.getRepository(User).extend({
   },
 
   async getVoucher(filter: FilterUserDto, userId: string) {
-    const query = UserRepository.createQueryBuilder('user').select(['user.id', 'user.createdOnDate'])
+    const query = UserRepository.createQueryBuilder('user')
+      .select(['user.id', 'user.createdOnDate'])
       .leftJoinAndSelect('user.vouchers', 'vouchers')
-      .andWhere('user.id = :userId', { userId});
+      .andWhere('user.id = :userId', { userId });
 
     if (filter.fullTextSearch) {
       const listFullTextSearch = filter.fullTextSearch.split(/　| /);
       listFullTextSearch.forEach((text, index) => {
         query.andWhere(
-          new Brackets(
-            (q) =>
-              q.where(`user.identifier like :identifier${index}`, {
-                [`identifier${index}`]: `%${text.trim()}%`,
-              }),
+          new Brackets((q) =>
+            q.where(`user.identifier like :identifier${index}`, {
+              [`identifier${index}`]: `%${text.trim()}%`,
+            }),
           ),
         );
       });

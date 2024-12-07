@@ -1,10 +1,5 @@
-import {
-  BadRequestException,
-  Injectable
-} from '@nestjs/common';
-import {
-  CreateNotifyDto
-} from './dtos/notify';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateNotifyDto } from './dtos/notify';
 import { NotifyRepository } from './notify.repository';
 // import { GenerateQrCode } from 'src/common/services/qrCode';
 

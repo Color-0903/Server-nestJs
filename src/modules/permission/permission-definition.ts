@@ -118,7 +118,7 @@ export class CrudPermissionDefinition extends PermissionDefinition {
   constructor(
     name: string,
     internal?: boolean,
-    private descriptionFn?: (operation: 'create' | 'read' | 'update' | 'delete') => string
+    private descriptionFn?: (operation: 'create' | 'read' | 'update' | 'delete') => string,
   ) {
     super({ name, internal });
   }

@@ -1,12 +1,5 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  OneToOne,
-} from 'typeorm';
+import { Column, DeepPartial, Entity, JoinColumn, JoinTable, OneToOne } from 'typeorm';
 import { Asset } from './asset.entity';
 
 @Entity('banner')

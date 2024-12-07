@@ -9,7 +9,7 @@ export class Order_detail extends AbstractEntity {
     super(input);
   }
   @Column({ nullable: true })
-  size: String;
+  size: string;
 
   @Column({ nullable: true })
   quantity: number;

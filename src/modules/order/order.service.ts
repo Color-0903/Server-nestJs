@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
 import { FilterOrderDto } from './dtos/filter.dto';
 import { CreateOrderDto, UpdateOrderDto } from './dtos/order.dto';
@@ -18,7 +14,6 @@ export class OrderService {
 
   public async create(dto: CreateOrderDto) {
     try {
-     
       console.log(dto);
       return await OrderRepository.save(dto);
     } catch (error) {

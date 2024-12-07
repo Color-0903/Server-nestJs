@@ -1,5 +1,6 @@
-import { float } from 'aws-sdk/clients/cloudfront';
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
+import { STORE_STATUS, STORE_TYPE } from 'src/common/constants/enum';
+import { OpenTime } from 'src/modules/store/dtos/store';
 import {
   Column,
   DeepPartial,
@@ -12,12 +13,10 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { User } from './user.entity';
-import { Cadastral } from './cadastral.entity';
-import { Voucher } from './voucher.entity';
-import { STORE_STATUS, STORE_TYPE } from 'src/common/constants/enum';
-import { OpenTime } from 'src/modules/store/dtos/store';
 import { Asset } from './asset.entity';
+import { Cadastral } from './cadastral.entity';
+import { User } from './user.entity';
+import { Voucher } from './voucher.entity';
 
 @Entity('store')
 export class Store extends AbstractEntity {

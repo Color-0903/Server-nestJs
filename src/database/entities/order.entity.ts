@@ -4,7 +4,7 @@ import { User } from './user.entity';
 import { Order_detail } from './order-detail.entity';
 
 @Entity('order')
-export class Order extends AbstractEntity  {
+export class Order extends AbstractEntity {
   constructor(input?: DeepPartial<Order>) {
     super(input);
   }
@@ -17,14 +17,14 @@ export class Order extends AbstractEntity  {
 
   @Column()
   status: string;
-  
+
   @Column({ nullable: true })
   total: number;
 
   @Column({ nullable: true })
   asset: string;
 
-  @Column({  type: 'text', nullable: true })
+  @Column({ type: 'text', nullable: true })
   address: string;
 
   @Column({ nullable: true, length: 11 })
@@ -37,7 +37,7 @@ export class Order extends AbstractEntity  {
     cascade: true,
   })
   order_detail: Order_detail[];
-  
+
   @ManyToOne(() => User, (p) => p.order)
   @JoinColumn({ name: 'userId' })
   user: User;

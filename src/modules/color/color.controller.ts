@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
@@ -40,7 +31,6 @@ export class ColorController {
     return ColorRepository.findOneBy({ id });
   }
 
-
   @Post('')
   @Allow(Permission.Authenticated)
   async create(@Body() dto: CreateColorDto) {
@@ -55,7 +45,7 @@ export class ColorController {
 
   @Delete(':id')
   @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string/* , @UserReq() userReq: User */) {
+  async delete(@Param('id') id: string /* , @UserReq() userReq: User */) {
     return this.colorService.delete(id);
   }
 }

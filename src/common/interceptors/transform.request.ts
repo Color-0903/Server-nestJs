@@ -43,5 +43,8 @@ export abstract class TransformRequest implements NestInterceptor {
     return obj;
   }
 
-  abstract transform(key: string | number, value: boolean | number | string | null | undefined): any;
+  abstract transform(
+    key: string | number,
+    value: boolean | number | string | null | undefined,
+  ): any;
 }

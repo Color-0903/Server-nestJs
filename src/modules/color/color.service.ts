@@ -32,8 +32,7 @@ export class ColorService {
     try {
       const findColor = await ColorRepository.findOneBy({ name: dto?.name });
 
-      if (!!findColor && findColor.id != id)
-        throw new ConflictException();
+      if (!!findColor && findColor.id != id) throw new ConflictException();
 
       await ColorRepository.update(id, dto);
       return {

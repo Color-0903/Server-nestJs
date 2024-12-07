@@ -35,4 +35,5 @@ export const PERMISSIONS_METADATA_KEY = '__permissions__';
  * @docsCategory request
  * @docsPage Allow Decorator
  */
-export const Allow = (...permissions: PermissionDefinition[]) => SetMetadata(PERMISSIONS_METADATA_KEY, permissions);
+export const Allow = (...permissions: PermissionDefinition[]) =>
+  SetMetadata(PERMISSIONS_METADATA_KEY, permissions);

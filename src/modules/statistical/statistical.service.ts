@@ -12,28 +12,25 @@ export class StatisticalService {
     const currentDate = new Date();
 
     for (let i = 0; i < 12; i++) {
-      const monthDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() - i,
-        1,
-      );
-      const month = monthDate.getMonth() + 1; 
+      const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+      const month = monthDate.getMonth() + 1;
       const year = monthDate.getFullYear();
-      months.unshift({ name: `T ${month}/${year}`, 'Voucher được kích hoạt': 0, monthDate }); 
+      months.unshift({ name: `T ${month}/${year}`, 'Voucher được kích hoạt': 0, monthDate });
     }
 
     return months;
   }
 
   private calcStatistical(inputs: any[]) {
-    let data: any = this.getLast12Months() as any;
+    const data: any = this.getLast12Months() as any;
     data.forEach((_item, _index) => {
       inputs.forEach((item) => {
         const currentMonth = moment(item?.createdOnDate).month();
-        if (moment(_item['monthDate']).month() != currentMonth) data[_index]['Voucher được kích hoạt'] = data[_index]['Voucher được kích hoạt']; 
+        if (moment(_item['monthDate']).month() != currentMonth)
+          data[_index]['Voucher được kích hoạt'] = data[_index]['Voucher được kích hoạt'];
         else data[_index]['Voucher được kích hoạt'] = +data[_index]['Voucher được kích hoạt'] + 1;
       });
-    })
+    });
 
     return data;
   }

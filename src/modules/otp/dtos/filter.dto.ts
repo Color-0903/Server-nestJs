@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, Length } from 'class-validator';
 
-export class FilterOtpDto  {
+export class FilterOtpDto {
   @ApiProperty({ name: 'identifier', type: String })
   @IsNotEmpty()
   @Transform(({ value }) => String(value.toString().trim()))

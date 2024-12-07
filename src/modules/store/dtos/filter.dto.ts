@@ -4,8 +4,8 @@ import { IsString } from 'class-validator';
 import { SearchFilter } from 'src/common/dtos/search-filter.dto';
 
 export class FilterStoreDto extends SearchFilter {
-    @ApiPropertyOptional({ name: 'userId', type: String })
-    @IsString()
-    @Transform(({ value }) => value?.toString())
-    userId: string;
+  @ApiPropertyOptional({ name: 'userId', type: String })
+  @IsString()
+  @Transform(({ value }) => value?.toString())
+  userId: string;
 }

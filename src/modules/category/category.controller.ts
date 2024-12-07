@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserReq } from 'src/common/decorators/userReq.decorator';
 import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
@@ -53,7 +44,7 @@ export class CategoryController {
 
   @Delete(':id')
   @Allow(Permission.Authenticated)
-  async delete(@Param('id') id: string/* , @UserReq() userReq: User */) {
+  async delete(@Param('id') id: string /* , @UserReq() userReq: User */) {
     return this.categoryService.delete(id);
   }
 }

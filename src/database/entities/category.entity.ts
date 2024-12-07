@@ -13,7 +13,7 @@ export class Category extends AbstractEntity {
 
   @Column({ type: 'text', nullable: true })
   description: string;
-  
+
   @ManyToMany(() => Product, (p) => p.categories, {
     onDelete: 'CASCADE',
   })

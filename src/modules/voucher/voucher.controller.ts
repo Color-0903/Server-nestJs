@@ -16,7 +16,12 @@ import { Voucher } from 'src/database/entities/voucher.entity';
 import { Allow } from '../auth/guards/allow.decorator';
 import { Permission } from '../permission';
 import { FilterUserVoucher, FilterVoucherDto } from './dtos/filter.dto';
-import { ActivateVoucherDto, CreateVoucherDto, RecallVoucherDto, UpdateVoucherDto } from './dtos/voucher';
+import {
+  ActivateVoucherDto,
+  CreateVoucherDto,
+  RecallVoucherDto,
+  UpdateVoucherDto,
+} from './dtos/voucher';
 import { VoucherRepository } from './voucher.repository';
 import { VoucherService } from './voucher.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
@@ -41,14 +46,7 @@ export class VoucherController {
   @Get('/user-voucher')
   @Allow(Permission.Partner)
   @UseInterceptors(
-    new RemoveFieldResponse([
-      'type',
-      'isActive',
-      'verified',
-      'dob',
-      'address',
-      'address_detail',
-    ]),
+    new RemoveFieldResponse(['type', 'isActive', 'verified', 'dob', 'address', 'address_detail']),
   )
   @ApiOkResponsePaginated(Voucher)
   async userVoucher(@Query() filter: FilterUserVoucher, @UserReq() userReq: User) {
@@ -67,7 +65,7 @@ export class VoucherController {
   async histories(@Query() filter: FilterUserVoucher, @UserReq() userReq: User) {
     return this.voucherService.histories(filter, userReq.id);
   }
-  
+
   @Post('/activate')
   @Allow(Permission.Partner)
   async activate(@Body() dto: ActivateVoucherDto, @UserReq() userReq: User) {
@@ -103,7 +101,7 @@ export class VoucherController {
   @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
   @Allow(Permission.Partner)
-  async delete(@Param('id') id: string , @UserReq() userReq: User) {
+  async delete(@Param('id') id: string, @UserReq() userReq: User) {
     return this.voucherService.delete(id);
   }
 }

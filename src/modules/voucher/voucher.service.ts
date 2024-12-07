@@ -7,24 +7,13 @@ import {
 } from '@nestjs/common';
 import * as moment from 'moment';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
-import {
-  GenerateCode,
-  GenerateNumber,
-  GenerateUrlCode,
-} from 'src/common/utils/function-util';
+import { GenerateCode, GenerateNumber, GenerateUrlCode } from 'src/common/utils/function-util';
 import dataSource from 'src/database/data-source';
 import { In } from 'typeorm';
 import { StoreRepository } from '../store/store.repository';
 import { FilterUserVoucher, FilterVoucherDto } from './dtos/filter.dto';
-import {
-  CreateVoucherDto,
-  RecallVoucherDto,
-  UpdateVoucherDto,
-} from './dtos/voucher';
-import {
-  VoucherHistoryRepository,
-  VoucherRepository,
-} from './voucher.repository';
+import { CreateVoucherDto, RecallVoucherDto, UpdateVoucherDto } from './dtos/voucher';
+import { VoucherHistoryRepository, VoucherRepository } from './voucher.repository';
 // import { GenerateQrCode } from 'src/common/services/qrCode';
 
 @Injectable()
@@ -97,9 +86,9 @@ export class VoucherService {
   }
   async recall(dto: RecallVoucherDto, userId: string) {
     try {
-      const voucherIds = (
-        await VoucherRepository.find({ where: { userId }, select: ['id'] })
-      )?.map((item) => item.id);
+      const voucherIds = (await VoucherRepository.find({ where: { userId }, select: ['id'] }))?.map(
+        (item) => item.id,
+      );
       if (voucherIds?.length) {
         await dataSource
           .createQueryBuilder()
@@ -121,19 +110,14 @@ export class VoucherService {
     if (!findVoucher) throw new NotFoundException();
     if (findVoucher?.userId != userId) throw new UnauthorizedException();
 
-    if (findVoucher?.quantity < 1)
-      throw new BadRequestException('VOUCHER_LIMITED');
+    if (findVoucher?.quantity < 1) throw new BadRequestException('VOUCHER_LIMITED');
 
-    if (findVoucher?.quantity < 1)
-      throw new BadRequestException('VOUCHER_LIMITED');
+    if (findVoucher?.quantity < 1) throw new BadRequestException('VOUCHER_LIMITED');
 
     if (findVoucher.expired && moment().isAfter(moment(findVoucher.expired)))
       throw new BadRequestException('VOUCHER_EXPIRED');
 
-    if (
-      findVoucher.releaseAt &&
-      moment().isBefore(moment(findVoucher.releaseAt))
-    )
+    if (findVoucher.releaseAt && moment().isBefore(moment(findVoucher.releaseAt)))
       throw new BadRequestException('VOUCHER_NOT_USE_YET');
     try {
       await Promise.all([

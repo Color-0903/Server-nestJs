@@ -1,5 +1,9 @@
 import { flatten } from '@nestjs/common';
-import { CrudPermissionDefinition, PermissionDefinition, PermissionMetadata } from './permission-definition';
+import {
+  CrudPermissionDefinition,
+  PermissionDefinition,
+  PermissionMetadata,
+} from './permission-definition';
 
 export const Permission = {
   Authenticated: new PermissionDefinition({
@@ -34,6 +38,8 @@ export const Permission = {
 
 export function getAllPermissionsMetadata(): PermissionMetadata[] {
   const allPermissions = flatten(Object.keys(Permission).map((key) => [Permission[key]]));
-  return allPermissions.reduce((all, def) => [...all, ...def.getMetadata()], [] as PermissionMetadata[]);
+  return allPermissions.reduce(
+    (all, def) => [...all, ...def.getMetadata()],
+    [] as PermissionMetadata[],
+  );
 }
-

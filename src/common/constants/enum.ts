@@ -40,6 +40,11 @@ export enum STORE_TYPE {
   COFFE = 'COFFE',
 }
 
+export enum AUTH_METHOD_TYPE {
+  NORMAL = 'NORMAL',
+  GOOGLE = 'GOOGLE',
+}
+
 export enum STORE_STATUS {
   PENDING = 'PENDING',
   ACCEPT = 'ACCEPT',
@@ -51,4 +56,3 @@ export enum NOTIFY_TYPE {
   SUPPORT = 'SUPPORT',
   NOTIFY = 'NOTIFY',
 }
-

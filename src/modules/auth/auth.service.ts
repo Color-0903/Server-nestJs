@@ -9,13 +9,13 @@ import { ResponseValue } from 'src/common/abstract/reponse';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
 import { PasswordCipher } from 'src/common/utils/password-cipher';
 import { User } from 'src/database/entities/user.entity';
+import { OtpRepository } from '../otp/otp.repository';
 import { OtpService } from '../otp/otp.service';
 import { UserRepository } from '../user/user.repository';
 import { UserService } from '../user/user.service';
 import { ForgotDto } from './dtos/forgot-password.dto';
 import { LoginDto } from './dtos/login.dto';
 import { RegisterUserDto } from './dtos/register.user';
-import { OtpRepository } from '../otp/otp.repository';
 
 @Injectable()
 export class AuthService {
@@ -36,10 +36,7 @@ export class AuthService {
     });
 
     if (!user) throw new UnauthorizedException();
-    const passMatch = await this.passwordCipher.check(
-      payload.password,
-      user.passwordHash,
-    );
+    const passMatch = await this.passwordCipher.check(payload.password, user.passwordHash);
     if (!passMatch) throw new UnauthorizedException();
 
     return this.encode(user);
@@ -51,8 +48,11 @@ export class AuthService {
       code: dto.code,
     });
 
-    const findUser = await UserRepository.findOneBy({ address: dto.identifier, type: dto?.type });
-    if(findUser) throw new ConflictException(); 
+    const findUser = await UserRepository.findOneBy({
+      identifier: dto.identifier,
+      type: dto?.type,
+    });
+    if (findUser) throw new ConflictException();
 
     try {
       await this.userService.create({ ...dto }, roleCode);
@@ -104,15 +104,12 @@ export class AuthService {
       identifier: dto.identifier,
       code: dto.code,
     });
-    
+
     await OtpRepository.update({ identifier: dto?.identifier }, { used: true });
 
     try {
       const passwordHash = await this.passwordCipher.hash(dto.password);
-      await UserRepository.update(
-        { identifier: dto.identifier },
-        { passwordHash },
-      );
+      await UserRepository.update({ identifier: dto.identifier }, { passwordHash });
 
       return ResponseValue();
     } catch (error) {

@@ -1,11 +1,5 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  JoinTable,
-  ManyToMany
-} from 'typeorm';
+import { Column, DeepPartial, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Asset } from './asset.entity';
 import { Category } from './category.entity';
 import { Color } from './color.entity';

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { BannerRepository } from './banner.repository';
 import { CreateBannerDto, UpdateBannerDto } from './dtos/banner';
 import { RESPONSE_MESSAGER } from 'src/common/constants/enum';
@@ -28,10 +24,7 @@ export class BannerService {
     if (!findById) throw new NotFoundException();
 
     if (dto?.asset?.id !== findById?.assetId) {
-      await this.assetService.delete(
-        findById?.asset?.source,
-        findById?.assetId,
-      );
+      await this.assetService.delete(findById?.asset?.source, findById?.assetId);
     }
 
     try {

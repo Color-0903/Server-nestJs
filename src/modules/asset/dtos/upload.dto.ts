@@ -23,10 +23,10 @@ class UpdateFor {
 }
 
 export class DeleteFileDto {
-  @ApiPropertyOptional({ type: String, name: 'id', })
+  @ApiPropertyOptional({ type: String, name: 'id' })
   @IsNotEmpty()
   id: string;
-  
+
   @ApiPropertyOptional({ type: String, name: 'oldSource' })
   @IsOptional()
   oldSource?: string;

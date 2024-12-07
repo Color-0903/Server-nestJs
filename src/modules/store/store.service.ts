@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { FilterStoreDto } from './dtos/filter.dto';
 import { CreateStoreDto, UpdateStoreDto } from './dtos/store';
 import { StoreRepository } from './store.repository';
@@ -11,9 +7,7 @@ import { AssetService } from '../asset/asset.service';
 
 @Injectable()
 export class StoreService {
-  constructor(
-    private assetService: AssetService,
-  ) {}
+  constructor(private assetService: AssetService) {}
 
   public async getAll(filter: FilterStoreDto) {
     return await StoreRepository.getAll(filter);
@@ -21,8 +15,8 @@ export class StoreService {
 
   public async create(dto: CreateStoreDto, userId: string) {
     try {
-      const count = StoreRepository.count({ where: { userId, status: STORE_STATUS.PENDING }  });
-      if(+count > 3) throw new BadRequestException("STORE_PENDING_EXIST");
+      const count = StoreRepository.count({ where: { userId, status: STORE_STATUS.PENDING } });
+      if (+count > 3) throw new BadRequestException('STORE_PENDING_EXIST');
       return await StoreRepository.save({ ...dto, userId });
     } catch (error) {
       throw new BadRequestException(error);
@@ -30,19 +24,28 @@ export class StoreService {
   }
 
   public async update(id: string, dto: UpdateStoreDto, userId: string) {
-    const find = await StoreRepository.findOne({ where: { id, userId  }, relations: { asset: true, assets: true } });
+    const find = await StoreRepository.findOne({
+      where: { id, userId },
+      relations: { asset: true, assets: true },
+    });
     if (!find) throw new NotFoundException();
 
-      try {
-      const listAssets = dto?.assets?.map(item => item?.id);
-      const listOleAssets = find?.assets?.map(item => item?.id);
-      const listRemove = find?.assets?.filter(item => (!listAssets.includes(item?.id) && (item?.id != dto?.asset?.id))).map(item => this.assetService.revemoveFile(item?.id, item?.source));
+    try {
+      const listAssets = dto?.assets?.map((item) => item?.id);
+      const listOleAssets = find?.assets?.map((item) => item?.id);
+      const listRemove = find?.assets
+        ?.filter((item) => !listAssets.includes(item?.id) && item?.id != dto?.asset?.id)
+        .map((item) => this.assetService.revemoveFile(item?.id, item?.source));
 
-      if(find?.asset && (find?.asset?.id !== dto?.asset?.id) && !(listOleAssets?.includes(dto?.asset?.id))) {
+      if (
+        find?.asset &&
+        find?.asset?.id !== dto?.asset?.id &&
+        !listOleAssets?.includes(dto?.asset?.id)
+      ) {
         listRemove.push(this.assetService.revemoveFile(find?.asset?.id, find?.asset?.source));
-      };
+      }
 
-      if(!!listRemove?.length) {
+      if (!!listRemove?.length) {
         await Promise.all(listRemove);
       }
 
@@ -57,11 +60,16 @@ export class StoreService {
 
   public async delete(id: string, userId: string) {
     try {
-      const find = await StoreRepository.findOne({ where: { id, userId }, relations: ['asset', 'assets'] });
+      const find = await StoreRepository.findOne({
+        where: { id, userId },
+        relations: ['asset', 'assets'],
+      });
       if (!find) throw new NotFoundException();
 
-      const removeAssetPromise = [...find?.assets, find?.asset]?.map(item => this.assetService?.revemoveFile(item?.id, item?.source));
-      if(!!removeAssetPromise?.length) await Promise.all(removeAssetPromise);
+      const removeAssetPromise = [...find?.assets, find?.asset]?.map(
+        (item) => this.assetService?.revemoveFile(item?.id, item?.source),
+      );
+      if (!!removeAssetPromise?.length) await Promise.all(removeAssetPromise);
 
       await StoreRepository.delete(id);
       return {

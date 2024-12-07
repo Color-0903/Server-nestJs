@@ -1,4 +1,11 @@
-import { Logger, MiddlewareConsumer, Module, NestModule, OnApplicationBootstrap, Type } from '@nestjs/common';
+import {
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  OnApplicationBootstrap,
+  Type,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AssetServerOptions, ImageTransformPreset } from './types';
 import { AssetStorageStrategy } from '../config/asset-storage-strategy/asset-storage-strategy';
@@ -155,10 +162,12 @@ export class AssetServerPlugin implements NestModule, OnApplicationBootstrap {
 
   /** @internal */
   static async configure(config: RuntimeVendureConfig) {
-    const storageStrategyFactory = this.options.storageStrategyFactory || defaultAssetStorageStrategyFactory;
+    const storageStrategyFactory =
+      this.options.storageStrategyFactory || defaultAssetStorageStrategyFactory;
     this.assetStorage = await storageStrategyFactory(this.options);
     config.assetOptions.assetStorageStrategy = this.assetStorage;
-    config.assetOptions.assetNamingStrategy = this.options.namingStrategy || new HashedAssetNamingStrategy();
+    config.assetOptions.assetNamingStrategy =
+      this.options.namingStrategy || new HashedAssetNamingStrategy();
     return config;
   }
 
@@ -284,7 +293,9 @@ export class AssetServerPlugin implements NestModule, OnApplicationBootstrap {
     if (w || h) {
       const width = w || '';
       const height = h || '';
-      imageParamHash = this.md5(`_transform_w${width}_h${height}_m${mode}${focalPoint}${imageFormat}`);
+      imageParamHash = this.md5(
+        `_transform_w${width}_h${height}_m${mode}${focalPoint}${imageFormat}`,
+      );
     } else if (preset) {
       if (this.presets && !!this.presets.find((p) => p.name === preset)) {
         imageParamHash = this.md5(`_transform_pre_${preset}${focalPoint}${imageFormat}`);

@@ -7,11 +7,7 @@ import {
 import { addMinutes, isBefore } from 'date-fns';
 import * as moment from 'moment';
 import * as nodemailer from 'nodemailer';
-import {
-  OTP_TYPE,
-  RESPONSE_MESSAGER,
-  USER_TYPE,
-} from 'src/common/constants/enum';
+import { OTP_TYPE, RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { UserRepository } from '../user/user.repository';
 import { FilterOtpDto } from './dtos/filter.dto';
 import { CreateOtpDto } from './dtos/otp.dto';
@@ -55,10 +51,7 @@ export class OtpService {
     });
 
     if (findOtp) {
-      const difference = moment().diff(
-        moment(findOtp.createdOnDate),
-        'minutes',
-      );
+      const difference = moment().diff(moment(findOtp.createdOnDate), 'minutes');
       if (+difference < 5) {
         throw new BadRequestException('LIMITED_TIME');
       }
@@ -102,11 +95,9 @@ export class OtpService {
 
       if (!findOtp) throw new NotFoundException();
 
-      if (findOtp?.code !== dto?.code)
-        throw new BadRequestException('OTP_MISMATCH');
+      if (findOtp?.code !== dto?.code) throw new BadRequestException('OTP_MISMATCH');
 
-      if (isBefore(findOtp.expired, new Date()))
-        throw new BadRequestException('OTP_EXPIRED');
+      if (isBefore(findOtp.expired, new Date())) throw new BadRequestException('OTP_EXPIRED');
 
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
@@ -116,6 +107,4 @@ export class OtpService {
       throw new BadRequestException(error);
     }
   }
-
- 
 }

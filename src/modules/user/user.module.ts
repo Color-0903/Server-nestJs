@@ -6,7 +6,7 @@ import { PasswordCipher } from '../../common/utils/password-cipher';
 import { RoleModule } from '../role/role.module';
 
 @Module({
-  imports: [ RoleModule ],
+  imports: [RoleModule],
   controllers: [UserController],
   providers: [UserService, PasswordCipher],
   exports: [UserService],

@@ -24,7 +24,7 @@ export class CadastralController {
     return await CadastralRepository.find({
       where: {
         cityCode: province?.baseCode,
-        type: 'district'
+        type: 'district',
       },
     });
   }
@@ -35,7 +35,7 @@ export class CadastralController {
     return await CadastralRepository.find({
       where: {
         districtCode: district?.baseCode,
-        type: 'ward'
+        type: 'ward',
       },
     });
   }

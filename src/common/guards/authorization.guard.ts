@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-  flatten
+  flatten,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from 'src/modules/auth/auth.service';
@@ -18,10 +18,7 @@ export class AuthorizationGuard implements CanActivate {
     private authService: AuthService,
   ) {}
 
-  checkValid(
-    permisstionRequired: PermissionDefinition[],
-    currentUserPermission: string[],
-  ) {
+  checkValid(permisstionRequired: PermissionDefinition[], currentUserPermission: string[]) {
     let valid = true;
     permisstionRequired.forEach((require) => {
       valid = valid && currentUserPermission.includes(require.name);
@@ -38,14 +35,12 @@ export class AuthorizationGuard implements CanActivate {
       return true;
     }
     const isPublic =
-      !!permissions &&
-      permissions.map((x) => x.name).includes(Permission.Public.name);
+      !!permissions && permissions.map((x) => x.name).includes(Permission.Public.name);
 
     if (!permissions || isPublic) {
       return true;
     } else {
-      const token = context.switchToHttp().getRequest().headers
-        .authorization as string;
+      const token = context.switchToHttp().getRequest().headers.authorization as string;
 
       const userJwt = this.authService.decode(token);
       if (!userJwt) {

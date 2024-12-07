@@ -122,7 +122,9 @@ export interface AssetServerOptions {
    *
    * @default () => LocalAssetStorageStrategy
    */
-  storageStrategyFactory?: (options: AssetServerOptions) => AssetStorageStrategy | Promise<AssetStorageStrategy>;
+  storageStrategyFactory?: (
+    options: AssetServerOptions,
+  ) => AssetStorageStrategy | Promise<AssetStorageStrategy>;
   /**
    * @description
    * Configures the `Cache-Control` directive for response to control caching in browsers and shared caches (e.g. Proxies, CDNs).

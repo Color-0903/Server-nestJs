@@ -1,16 +1,8 @@
 import { float } from 'aws-sdk/clients/cloudfront';
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany
-} from 'typeorm';
-import { User } from './user.entity';
+import { Column, DeepPartial, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { Store } from './store.entity';
+import { User } from './user.entity';
 
 @Entity('voucher')
 export class Voucher extends AbstractEntity {

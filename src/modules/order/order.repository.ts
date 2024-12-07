@@ -1,4 +1,3 @@
-
 import dataSource from 'src/database/data-source';
 import { Order } from 'src/database/entities/order.entity';
 import { Brackets } from 'typeorm';
@@ -30,7 +29,6 @@ export const OrderRepository = dataSource.getRepository(Order).extend({
         }
       } else query.andWhere('order.status = :status', { status: filter.status });
     }
-
 
     const result = await query.toPaginationResponse({
       size: filter.size,

@@ -1,5 +1,11 @@
 import { Type, applyDecorators } from '@nestjs/common';
-import { ApiExtraModels, ApiHideProperty, ApiOkResponse, ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiHideProperty,
+  ApiOkResponse,
+  ApiProperty,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { SelectQueryBuilder } from 'typeorm';
 
 export class PaginationResponse<T> {
@@ -29,7 +35,7 @@ export const ApiOkResponsePaginated = <DataDto extends Type<unknown>>(dataDto: D
           },
         ],
       },
-    })
+    }),
   );
 
 export class PaginationParam {
@@ -53,7 +59,7 @@ SelectQueryBuilder.prototype.toPaginationResponse = async function <Entity>(
   params: PaginationParam,
 ) {
   const alias = this.alias;
-    if (params.sort) {
+  if (params.sort) {
     const sortKeyValue = params.sort.split('-');
     const direction = sortKeyValue[0];
     const key = sortKeyValue[1];

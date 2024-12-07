@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserReq } from 'src/common/decorators/userReq.decorator';
 import { ApiOkResponsePaginated } from 'src/common/utils/query-util';
@@ -37,10 +28,10 @@ export class OrderController {
   async getById(@Param('id') id: string) {
     return OrderRepository.findOne({
       where: { id },
-      relations:{
+      relations: {
         order_detail: true,
-         user: true
-      }
+        user: true,
+      },
     });
   }
   @Post('')

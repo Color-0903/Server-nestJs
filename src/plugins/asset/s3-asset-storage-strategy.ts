@@ -181,11 +181,11 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
 
   async writeFileFromBuffer(fileName: string, data: Buffer, mimetype: string): Promise<string> {
     const optimizedImage = await sharp(data)
-    .resize(1024, null, {
-      fit: 'inside',
-    })
-    .jpeg({ quality: 90 })
-    .toBuffer();
+      .resize(1024, null, {
+        fit: 'inside',
+      })
+      .jpeg({ quality: 90 })
+      .toBuffer();
 
     const result = await this.s3
       .upload(
@@ -296,19 +296,26 @@ export class S3AssetStorageStrategy implements AssetStorageStrategy {
       bucketExists = true;
       Logger.verbose(`Found S3 bucket "${bucket}"`);
     } catch (e) {
-      Logger.verbose(`Could not find bucket "${bucket}: ${e.message ?? ''}". Attempting to create...`);
+      Logger.verbose(
+        `Could not find bucket "${bucket}: ${e.message ?? ''}". Attempting to create...`,
+      );
     }
     if (!bucketExists) {
       try {
         await this.s3.createBucket({ Bucket: bucket, ACL: 'private' }).promise();
         Logger.verbose(`Created S3 bucket "${bucket}"`);
       } catch (e) {
-        Logger.error(`Could not find nor create the S3 bucket "${bucket}: ${e.message ?? ''}"`, e.stack);
+        Logger.error(
+          `Could not find nor create the S3 bucket "${bucket}: ${e.message ?? ''}"`,
+          e.stack,
+        );
       }
     }
   }
 
-  private isCredentialsProfile(credentials: S3Credentials | S3CredentialsProfile): credentials is S3CredentialsProfile {
+  private isCredentialsProfile(
+    credentials: S3Credentials | S3CredentialsProfile,
+  ): credentials is S3CredentialsProfile {
     return credentials.hasOwnProperty('profile');
   }
 }

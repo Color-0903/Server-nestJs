@@ -13,7 +13,7 @@ export class Color extends AbstractEntity {
 
   @Column({ type: 'text', nullable: true })
   description: string;
-  
+
   @ManyToMany(() => Product, (p) => p.colors, {
     onDelete: 'CASCADE',
   })

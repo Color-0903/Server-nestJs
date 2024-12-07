@@ -2,7 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString, NotEquals } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 
-export class CreateRoleDto  {
+export class CreateRoleDto {
   @ApiProperty({ type: String, name: 'name' })
   @IsString()
   @IsNotEmpty()
@@ -11,7 +11,7 @@ export class CreateRoleDto  {
   @Transform(({ value }) => String(value.toString().trim()))
   name: string;
 
-  @ApiProperty({ name: 'permissions', type: Array<String> })
+  @ApiProperty({ name: 'permissions', type: Array<string> })
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty()

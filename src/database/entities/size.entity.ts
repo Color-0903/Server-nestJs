@@ -1,9 +1,9 @@
+import { AbstractEntity } from 'src/common/abstract/abstract.entity';
 import { Column, DeepPartial, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Product } from './products.entity';
-import { AbstractEntity } from 'src/common/abstract/abstract.entity';
 
 @Entity('size')
-export class Size  extends AbstractEntity {
+export class Size extends AbstractEntity {
   constructor(input?: DeepPartial<Size>) {
     super(input);
   }
@@ -13,7 +13,7 @@ export class Size  extends AbstractEntity {
 
   @Column({ type: 'text', nullable: true })
   description: string;
-  
+
   @ManyToMany(() => Product, (p) => p.sizes, {
     onDelete: 'CASCADE',
   })

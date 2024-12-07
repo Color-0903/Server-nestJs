@@ -23,7 +23,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
           throw new InternalServerErrorException(error.message);
         }
         throw error;
-      })
+      }),
     );
   }
 }

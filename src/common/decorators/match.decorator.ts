@@ -7,7 +7,11 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-export const Match = <T>(type: ClassConstructor<T>, property: (o: T) => any, validationOptions?: ValidationOptions) => {
+export const Match = <T>(
+  type: ClassConstructor<T>,
+  property: (o: T) => any,
+  validationOptions?: ValidationOptions,
+) => {
   return (object: any, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
@@ -35,7 +39,7 @@ export class MatchConstraint implements ValidatorConstraintInterface {
 export const NotMatch = <T>(
   type: ClassConstructor<T>,
   property: (o: T) => any,
-  validationOptions?: ValidationOptions
+  validationOptions?: ValidationOptions,
 ) => {
   return (object: any, propertyName: string) => {
     registerDecorator({
@@ -60,4 +64,3 @@ export class NotMatchConstraint implements ValidatorConstraintInterface {
     return `${constraintProperty} and ${args.property} does not match`;
   }
 }
-

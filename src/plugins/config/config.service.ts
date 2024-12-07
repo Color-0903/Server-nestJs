@@ -1,5 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AssetOptions, AuthOptions, ImportExportOptions, RuntimeVendureConfig, VendureConfig } from './vendure-config';
+import {
+  AssetOptions,
+  AuthOptions,
+  ImportExportOptions,
+  RuntimeVendureConfig,
+  VendureConfig,
+} from './vendure-config';
 import { getConfig } from './config-helpers';
 
 @Injectable()

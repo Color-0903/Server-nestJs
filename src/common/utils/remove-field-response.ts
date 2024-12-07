@@ -36,7 +36,12 @@ export class RemoveFieldResponse implements NestInterceptor {
         }
       }
 
-      if (value && typeof value === 'object' && !Object.keys(value).length && !(value instanceof Date)) {
+      if (
+        value &&
+        typeof value === 'object' &&
+        !Object.keys(value).length &&
+        !(value instanceof Date)
+      ) {
         target[key] = null;
       }
     }

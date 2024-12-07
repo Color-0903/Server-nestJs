@@ -30,12 +30,12 @@ describe('DefaultAssetNamingStrategy', () => {
       expect(strategy.generateSourceFileName(ctx, 'ext45000000000505', 'ext45000000000505')).toBe(
         'ext45000000000505__02',
       );
-      expect(strategy.generateSourceFileName(ctx, 'ext45000000000505', 'ext45000000000505__02')).toBe(
-        'ext45000000000505__03',
-      );
-      expect(strategy.generateSourceFileName(ctx, 'ext45000000000505', 'ext45000000000505__09')).toBe(
-        'ext45000000000505__10',
-      );
+      expect(
+        strategy.generateSourceFileName(ctx, 'ext45000000000505', 'ext45000000000505__02'),
+      ).toBe('ext45000000000505__03');
+      expect(
+        strategy.generateSourceFileName(ctx, 'ext45000000000505', 'ext45000000000505__09'),
+      ).toBe('ext45000000000505__10');
     });
   });
 

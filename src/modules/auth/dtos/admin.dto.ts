@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import {
-    IsNotEmpty,
-    IsString,
-    Length,
-    MaxLength,
-    MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Length, MaxLength, MinLength } from 'class-validator';
 
 export class CreatePartnerDto {
   @ApiProperty({ name: 'identifier', type: String })

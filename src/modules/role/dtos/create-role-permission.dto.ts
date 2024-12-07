@@ -1,1 +1,1 @@
-export class CreateRolePermissionDto  {}
+export class CreateRolePermissionDto {}

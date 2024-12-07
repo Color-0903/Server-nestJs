@@ -1,18 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { RESPONSE_MESSAGER, USER_TYPE } from 'src/common/constants/enum';
 import { PasswordCipher } from '../../common/utils/password-cipher';
 import { Permission } from '../permission';
 import { RoleRepository } from '../role/role.repository';
 import { RoleService } from '../role/role.service';
-import {
-  CreateUserDto,
-  UpdatePasswordDto,
-  UpdateUserDto,
-} from './dtos/user.dto';
+import { CreateUserDto, UpdatePasswordDto, UpdateUserDto } from './dtos/user.dto';
 import { FilterUserDto } from './dtos/filter.dto';
 import { UserRepository } from './user.repository';
 import { OtpRepository } from '../otp/otp.repository';
@@ -38,9 +30,7 @@ export class UserService {
           name: Permission.SuperAdmin.name,
         });
       }
-      const passwordHash = await this.passwordCipher.hash(
-        process.env.INITIAL_ADMIN_PASSWORD,
-      );
+      const passwordHash = await this.passwordCipher.hash(process.env.INITIAL_ADMIN_PASSWORD);
 
       await UserRepository.save({
         identifier: process.env.INITIAL_ADMIN_IDENTIFIER,
@@ -69,7 +59,8 @@ export class UserService {
           {
             used: true,
           },
-        )])
+        ),
+      ]);
 
       return {
         result: RESPONSE_MESSAGER.SUCCESS,
@@ -97,10 +88,7 @@ export class UserService {
     });
     if (!user) throw new NotFoundException();
 
-    const passMatch = await this.passwordCipher.check(
-      dto.current,
-      user.passwordHash,
-    );
+    const passMatch = await this.passwordCipher.check(dto.current, user.passwordHash);
 
     if (!passMatch) throw new BadRequestException('CURRENT_PASS_NOT_CORRECT');
 
@@ -119,7 +107,6 @@ export class UserService {
   public async getVoucher(filter: FilterUserDto, userId: string) {
     return await UserRepository.getVoucher(filter, userId);
   }
-
 
   public async delete(id: string) {
     return UserRepository.softDelete(id);

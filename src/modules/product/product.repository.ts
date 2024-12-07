@@ -5,9 +5,10 @@ import { FilterProductDto } from './dtos/filter.dto';
 
 export const ProductRepository = dataSource.getRepository(Product).extend({
   async getAll(filter: FilterProductDto) {
-    const query = ProductRepository.createQueryBuilder(
-      'product',
-    ).leftJoinAndSelect('product.assets', 'assets');
+    const query = ProductRepository.createQueryBuilder('product').leftJoinAndSelect(
+      'product.assets',
+      'assets',
+    );
 
     if (filter.fullTextSearch) {
       const listFullTextSearch = filter.fullTextSearch.split(/　| /);

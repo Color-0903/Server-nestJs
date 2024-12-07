@@ -1,11 +1,5 @@
 import { AssetType } from 'src/common/constants/enum';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  ManyToMany,
-  Tree
-} from 'typeorm';
+import { Column, DeepPartial, Entity, ManyToMany, Tree } from 'typeorm';
 import { AbstractEntity } from '../../common/abstract/abstract.entity';
 import { Product } from './products.entity';
 

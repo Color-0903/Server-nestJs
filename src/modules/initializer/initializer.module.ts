@@ -9,12 +9,15 @@ import { ConfigModule } from '../../plugins/config/config.module';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [ RoleModule, ConfigModule, UserModule ],
+  imports: [RoleModule, ConfigModule, UserModule],
   controllers: [],
   providers: [InitializerService],
 })
 export class InitializerModule implements OnApplicationBootstrap, OnApplicationShutdown {
-  constructor(private configService: ConfigService, private moduleRef: ModuleRef) {}
+  constructor(
+    private configService: ConfigService,
+    private moduleRef: ModuleRef,
+  ) {}
   async onApplicationBootstrap() {
     await this.initInjectableStrategies();
   }
@@ -41,8 +44,7 @@ export class InitializerModule implements OnApplicationBootstrap, OnApplicationS
   }
 
   private getInjectableStrategies(): InjectableStrategy[] {
-    const { passwordValidationStrategy } =
-      this.configService.authOptions;
+    const { passwordValidationStrategy } = this.configService.authOptions;
 
     return [passwordValidationStrategy];
   }

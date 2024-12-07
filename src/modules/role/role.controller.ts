@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoleService } from './role.service';
 import { Permission } from '../permission';
@@ -47,7 +58,11 @@ export class RoleController {
 
   @Patch(':id')
   @Allow(Permission.Administrator.Update)
-  public async update(@Param('id') id: string, @Body() payload: UpdateRoleDto, @UserReq() userReq: User) {
+  public async update(
+    @Param('id') id: string,
+    @Body() payload: UpdateRoleDto,
+    @UserReq() userReq: User,
+  ) {
     // return await this.roleService.update(id, payload, userReq);
   }
 

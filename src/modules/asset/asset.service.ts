@@ -43,12 +43,7 @@ export class AssetService {
       // });
       let result: any;
       try {
-        result = await this.createAssetInternal(
-          buffer,
-          filename,
-          mimetype,
-          oldName,
-        );
+        result = await this.createAssetInternal(buffer, filename, mimetype, oldName);
       } catch (e) {
         reject(e);
         return;
@@ -68,20 +63,17 @@ export class AssetService {
       throw new Error('MimeTypeError');
     }
     const { assetStorageStrategy } = assetOptions;
-    let sourceFileName = await this.getSourceFileName(fileName);
+    const sourceFileName = await this.getSourceFileName(fileName);
     const sourceFileIdentifier = await assetStorageStrategy.writeFileFromBuffer(
       sourceFileName,
       buffer,
       mimetype,
     );
-    const sourceFile =
-      await assetStorageStrategy.readFileToBuffer(sourceFileIdentifier);
+    const sourceFile = await assetStorageStrategy.readFileToBuffer(sourceFileIdentifier);
 
     const type = getAssetType(mimetype);
     const { width, height } =
-      type === AssetType.IMAGE
-        ? this.getDimensions(sourceFile)
-        : { width: 0, height: 0 };
+      type === AssetType.IMAGE ? this.getDimensions(sourceFile) : { width: 0, height: 0 };
 
     const asset = new Asset({
       type,
@@ -131,9 +123,7 @@ export class AssetService {
     let outputFileName: string | undefined;
     do {
       outputFileName = generateNameFn(inputFileName, outputFileName);
-    } while (
-      await assetOptions.assetStorageStrategy.fileExists(outputFileName)
-    );
+    } while (await assetOptions.assetStorageStrategy.fileExists(outputFileName));
     return outputFileName;
   }
   public async delete(identifier: string, assetId: string) {
@@ -189,7 +179,7 @@ export class AssetService {
       await Promise.all([
         AssetRepository.delete(id),
         assetStorageStrategy.deleteFile(s3Identifier),
-      ])
+      ]);
     } catch (error) {
       throw new BadRequestException(error);
     }

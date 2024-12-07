@@ -1,11 +1,5 @@
 import { AbstractEntity } from 'src/common/abstract/abstract.entity';
-import {
-  Column,
-  DeepPartial,
-  Entity,
-  JoinColumn,
-  ManyToOne
-} from 'typeorm';
+import { Column, DeepPartial, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Voucher } from './voucher.entity';
 
 @Entity('voucher_histories')

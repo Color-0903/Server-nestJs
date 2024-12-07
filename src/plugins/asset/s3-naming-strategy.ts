@@ -7,7 +7,7 @@ export class S3NamingStrategy implements AssetNamingStrategy {
   private readonly numberingRe: RegExp = /__(\d+)(\.[^.]+)?$/;
 
   generateSourceFileName(originalFileName: string, conflictFileName?: string): string {
-    let normalized: string = normalizeString(originalFileName, '-');
+    const normalized: string = normalizeString(originalFileName, '-');
     if (!conflictFileName) {
       return normalized;
     } else {

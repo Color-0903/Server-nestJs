@@ -1,4 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PermissionDefinition } from 'src/modules/permission/permission-definition';
 import { UserService } from 'src/modules/user/user.service';
@@ -13,11 +19,15 @@ export class AuthorizationGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const permissions = this.reflector.get<PermissionDefinition[]>(PERMISSIONS_METADATA_KEY, context.getHandler());
+    const permissions = this.reflector.get<PermissionDefinition[]>(
+      PERMISSIONS_METADATA_KEY,
+      context.getHandler(),
+    );
     if (!permissions) {
       return true;
     }
-    const isPublic = !!permissions && permissions.map((x) => x.name).includes(Permission.Public.name);
+    const isPublic =
+      !!permissions && permissions.map((x) => x.name).includes(Permission.Public.name);
 
     if (!permissions || isPublic) {
       return true;

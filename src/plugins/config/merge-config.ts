@@ -25,7 +25,11 @@ import { VendureConfig } from './vendure-config';
  *
  * @docsCategory configuration
  */
-export function mergeConfig<T extends VendureConfig>(target: T, source: PartialVendureConfig, depth = 0): T {
+export function mergeConfig<T extends VendureConfig>(
+  target: T,
+  source: PartialVendureConfig,
+  depth = 0,
+): T {
   if (!source) {
     return target;
   }

@@ -48,13 +48,12 @@ export function normalizeString(input: string, spaceReplacer = ' '): string {
     .replace(/\s+/g, spaceReplacer);
 }
 
-
 export function GenerateCode(length?: number) {
-  const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@~&?";
-  let code = "";
+  const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@~&?';
+  let code = '';
   for (let i = 0; i < (length ?? 3); i++) {
-      const randomIndex = Math.floor(Math.random() * letters.length);
-      code += letters[randomIndex];
+    const randomIndex = Math.floor(Math.random() * letters.length);
+    code += letters[randomIndex];
   }
   return code;
 }
@@ -68,7 +67,6 @@ export function GenerateNumber(quantity: number) {
   return otpCode.trim();
 }
 
-
-export function GenerateUrlCode(code: string){
-  return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${code}`
+export function GenerateUrlCode(code: string) {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${code}`;
 }
