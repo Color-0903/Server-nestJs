@@ -1,12 +1,12 @@
 import { Module, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
-import { InitializerService } from './initializer.service';
-import { RoleModule } from '../role/role.module';
 import { ModuleRef } from '@nestjs/core';
-import { Injector } from '../../common/types/injector';
 import { InjectableStrategy } from '../../common/types/injectable-strategy';
-import { ConfigService } from '../../plugins/config/config.service';
+import { Injector } from '../../common/types/injector';
 import { ConfigModule } from '../../plugins/config/config.module';
+import { ConfigService } from '../../plugins/config/config.service';
+import { RoleModule } from '../role/role.module';
 import { UserModule } from '../user/user.module';
+import { InitializerService } from './initializer.service';
 
 @Module({
   imports: [RoleModule, ConfigModule, UserModule],

@@ -6,7 +6,7 @@ import { USER_TYPE } from '../constants/enum';
 export class GoogleAuthGuard extends AuthGuard('google') {
   constructor() {
     super({
-      accessType: 'offline',
+      accessType: 'online',
       prompt: 'consent',
     });
   }

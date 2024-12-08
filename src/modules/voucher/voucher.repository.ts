@@ -1,9 +1,9 @@
 import dataSource from 'src/database/data-source';
+import { VoucherHistory } from 'src/database/entities/voucher-history.entity';
 import { Voucher } from 'src/database/entities/voucher.entity';
 import { Brackets } from 'typeorm';
 import { UserRepository } from '../user/user.repository';
 import { FilterUserVoucher, FilterVoucherDto } from './dtos/filter.dto';
-import { VoucherHistory } from 'src/database/entities/voucher-history.entity';
 
 export const VoucherRepository = dataSource.getRepository(Voucher).extend({
   async getAll(filter: FilterVoucherDto) {
@@ -45,6 +45,7 @@ export const VoucherRepository = dataSource.getRepository(Voucher).extend({
     const voucherIds = (await VoucherRepository.find({ where: { userId }, select: ['id'] }))?.map(
       (item) => item.id,
     );
+    if (!voucherIds?.length) return [];
     const query = UserRepository.createQueryBuilder('user')
       .leftJoinAndSelect('user.asset', 'asset')
       .leftJoinAndMapMany('user.vouchers', Voucher, 'voucher', 'voucher.id IN (:...voucherIds)', {

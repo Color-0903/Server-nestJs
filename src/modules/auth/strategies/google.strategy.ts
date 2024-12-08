@@ -2,16 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { AUTH_METHOD_TYPE, USER_TYPE } from 'src/common/constants/enum';
+import { Permission } from 'src/modules/permission';
+import { RoleRepository } from 'src/modules/role/role.repository';
 import { UserRepository } from 'src/modules/user/user.repository';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
-    console.log('RUN VO DAY');
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.CALLBACKURL,
+      callbackURL: `${process.env.BACKEND_API}/auth/google-callback`,
       scope: ['email', 'profile'],
       passReqToCallback: true,
     });
@@ -37,6 +38,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       where: { identifier: user?.email, type: userType?.toString() },
     });
     if (!googleUser) {
+      const role = await RoleRepository.findOne({
+        where: { name: Permission.Partner.name },
+      });
       googleUser = await UserRepository.save({
         identifier: user?.email,
         displayName: `${user?.firstName ?? ''} ${user?.lastName ?? ''} `.trim(),
@@ -45,6 +49,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         isActive: true,
         type: userType,
         passwordHash: '',
+        roles: [role ?? undefined],
       });
     }
 

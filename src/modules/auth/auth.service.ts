@@ -119,10 +119,7 @@ export class AuthService {
 
   public async googleAuth(user: User) {
     try {
-      const token = await this.encode(user);
-      return {
-        token,
-      };
+      return await this.encode(user);
     } catch (error) {
       throw new BadRequestException(error);
     }
